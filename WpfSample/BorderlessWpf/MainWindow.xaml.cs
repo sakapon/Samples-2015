@@ -23,6 +23,8 @@ namespace BorderlessWpf
         public MainWindow()
         {
             InitializeComponent();
+
+            MouseLeftButtonDown += (o, e) => DragMove();
         }
     }
 }
