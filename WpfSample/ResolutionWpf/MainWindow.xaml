@@ -9,6 +9,8 @@
 				<TextBlock Text="{Binding Height, ElementName=window, Mode=OneWay, StringFormat=Height: \{0\}}"/>
 				<TextBlock Text="{Binding ActualWidth, ElementName=window, Mode=OneWay, StringFormat=Actual Width: \{0\}}"/>
 				<TextBlock Text="{Binding ActualHeight, ElementName=window, Mode=OneWay, StringFormat=Actual Height: \{0\}}"/>
+				<TextBlock Text="{Binding MouseOnWindow, ElementName=window, Mode=OneWay, StringFormat=Mouse on Window: \{0\}}"/>
+				<TextBlock Text="{Binding MouseOnScreen, ElementName=window, Mode=OneWay, StringFormat=Mouse on Screen: \{0\}}"/>
 			</StackPanel>
 		</Grid>
 	</Viewbox>
