@@ -40,16 +40,18 @@
     			</StackPanel>
     		</Grid>
     	</Viewbox>
-    	<Border Grid.Row="1" Grid.Column="1" Margin="20" Background="#FFFFEEBB">
+    	<Grid Grid.Row="1" Grid.Column="1" Margin="20" Background="#FFFFEEBB">
     		<Viewbox MaxWidth="200" HorizontalAlignment="Left" VerticalAlignment="Top">
-    			<StackPanel Width="200" Background="LightGray">
-    				<TextBlock Text="TextBlock"/>
-    				<TextBlock Text="TextBlock"/>
-    				<TextBlock Text="TextBlock"/>
-    				<TextBlock Text="TextBlock"/>
-    				<TextBlock Text="TextBlock"/>
-    			</StackPanel>
+    			<Grid Width="200" Background="LightGray">
+    				<StackPanel>
+    					<TextBlock Text="TextBlock"/>
+    					<TextBlock Text="TextBlock"/>
+    					<TextBlock Text="TextBlock"/>
+    					<TextBlock Text="TextBlock"/>
+    					<TextBlock Text="TextBlock"/>
+    				</StackPanel>
+    			</Grid>
     		</Viewbox>
-    	</Border>
+    	</Grid>
     </Grid>
 </Window>
