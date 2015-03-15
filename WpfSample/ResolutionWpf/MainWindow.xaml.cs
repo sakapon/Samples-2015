@@ -42,6 +42,8 @@ namespace ResolutionWpf
         {
             InitializeComponent();
 
+            // WindowStyle="None" のときにウィンドウを最大化すると、左上のスクリーン座標は (-8, -8) となります (枠の幅が 8)。
+            // さらに AllowsTransparency="True" の場合、(-8, -8) からウィンドウが描画されます。
             MouseMove += (o, e) =>
             {
                 MouseOnWindow = e.GetPosition(this);
