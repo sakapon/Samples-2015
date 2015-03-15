@@ -11,15 +11,17 @@
     		<RowDefinition/>
     		<RowDefinition/>
     	</Grid.RowDefinitions>
-		<StackPanel Margin="20" Background="#FFEECCBB">
-    		<TextBlock Text="TextBlock"/>
-    		<TextBlock Text="TextBlock"/>
-    		<TextBlock Text="TextBlock"/>
-    		<TextBlock Text="TextBlock"/>
-    		<TextBlock Text="TextBlock"/>
-    	</StackPanel>
-    	<ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-    		<StackPanel Margin="20" Background="#FFCCEEBB">
+    	<Grid Margin="20" Background="#FFEECCBB">
+    		<StackPanel>
+    			<TextBlock Text="TextBlock"/>
+    			<TextBlock Text="TextBlock"/>
+    			<TextBlock Text="TextBlock"/>
+    			<TextBlock Text="TextBlock"/>
+    			<TextBlock Text="TextBlock"/>
+    		</StackPanel>
+    	</Grid>
+    	<ScrollViewer Grid.Column="1" Margin="20" Background="#FFCCEEBB" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+    		<StackPanel>
     			<TextBlock Text="TextBlock"/>
     			<TextBlock Text="TextBlock"/>
     			<TextBlock Text="TextBlock"/>
@@ -27,14 +29,16 @@
     			<TextBlock Text="TextBlock"/>
     		</StackPanel>
     	</ScrollViewer>
-    	<Viewbox Grid.Row="1">
-    		<StackPanel Width="450" Height="300" Margin="20" Background="#FFBBCCEE">
-    			<TextBlock Text="TextBlock"/>
-    			<TextBlock Text="TextBlock"/>
-    			<TextBlock Text="TextBlock"/>
-    			<TextBlock Text="TextBlock"/>
-    			<TextBlock Text="TextBlock"/>
-    		</StackPanel>
+    	<Viewbox Grid.Row="1" Margin="20">
+    		<Grid Width="390" Height="260" Background="#FFBBCCEE">
+    			<StackPanel>
+    				<TextBlock Text="TextBlock"/>
+    				<TextBlock Text="TextBlock"/>
+    				<TextBlock Text="TextBlock"/>
+    				<TextBlock Text="TextBlock"/>
+    				<TextBlock Text="TextBlock"/>
+    			</StackPanel>
+    		</Grid>
     	</Viewbox>
     	<Border Grid.Row="1" Grid.Column="1" Margin="20" Background="#FFFFEEBB">
     		<Viewbox MaxWidth="200" HorizontalAlignment="Left" VerticalAlignment="Top">
