@@ -1,57 +1,45 @@
-﻿<Window x:Class="LayoutWpf.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:LayoutWpf" x:Class="LayoutWpf.MainWindow"
         Title="MainWindow" Width="900" Height="600" FontSize="32">
-    <Grid>
-    	<Grid.ColumnDefinitions>
-    		<ColumnDefinition/>
-    		<ColumnDefinition/>
-    	</Grid.ColumnDefinitions>
-    	<Grid.RowDefinitions>
-    		<RowDefinition/>
-    		<RowDefinition/>
-    	</Grid.RowDefinitions>
-    	<Grid Margin="20" Background="#FFEECCBB">
-    		<StackPanel>
-    			<TextBlock Text="TextBlock"/>
-    			<TextBlock Text="TextBlock"/>
-    			<TextBlock Text="TextBlock"/>
-    			<TextBlock Text="TextBlock"/>
-    			<TextBlock Text="TextBlock"/>
-    		</StackPanel>
-    	</Grid>
-    	<ScrollViewer Grid.Column="1" Margin="20" Background="#FFCCEEBB" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-    		<StackPanel>
-    			<TextBlock Text="TextBlock"/>
-    			<TextBlock Text="TextBlock"/>
-    			<TextBlock Text="TextBlock"/>
-    			<TextBlock Text="TextBlock"/>
-    			<TextBlock Text="TextBlock"/>
-    		</StackPanel>
-    	</ScrollViewer>
-    	<Viewbox Grid.Row="1" Margin="20">
-    		<Grid Width="390" Height="260" Background="#FFBBCCEE">
-    			<StackPanel>
-    				<TextBlock Text="TextBlock"/>
-    				<TextBlock Text="TextBlock"/>
-    				<TextBlock Text="TextBlock"/>
-    				<TextBlock Text="TextBlock"/>
-    				<TextBlock Text="TextBlock"/>
-    			</StackPanel>
-    		</Grid>
-    	</Viewbox>
-    	<Grid Grid.Row="1" Grid.Column="1" Margin="20" Background="#FFFFEEBB">
-    		<Viewbox MaxWidth="200" HorizontalAlignment="Left" VerticalAlignment="Top">
-    			<Grid Width="200" Background="LightGray">
-    				<StackPanel>
-    					<TextBlock Text="TextBlock"/>
-    					<TextBlock Text="TextBlock"/>
-    					<TextBlock Text="TextBlock"/>
-    					<TextBlock Text="TextBlock"/>
-    					<TextBlock Text="TextBlock"/>
-    				</StackPanel>
-    			</Grid>
-    		</Viewbox>
-    	</Grid>
-    </Grid>
+	<Window.Resources>
+		<ItemsPanelTemplate x:Key="NumbersPanelTemplate">
+			<WrapPanel IsItemsHost="True"/>
+		</ItemsPanelTemplate>
+		<DataTemplate x:Key="NumberDataTemplate">
+			<TextBlock Text="{Binding Mode=OneWay, StringFormat=No.\{0\}}" Width="120" TextAlignment="Center"/>
+		</DataTemplate>
+	</Window.Resources>
+	<Window.DataContext>
+		<local:AppModel/>
+	</Window.DataContext>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		<Grid Margin="20" Background="#FFEECCBB">
+			<ItemsControl ItemsSource="{Binding Numbers}" ItemsPanel="{DynamicResource NumbersPanelTemplate}" ItemTemplate="{DynamicResource NumberDataTemplate}"/>
+		</Grid>
+		<ScrollViewer Grid.Column="1" Margin="20" Background="#FFCCEEBB">
+			<ItemsControl ItemsSource="{Binding Numbers}" ItemsPanel="{DynamicResource NumbersPanelTemplate}" ItemTemplate="{DynamicResource NumberDataTemplate}"/>
+		</ScrollViewer>
+		<Viewbox Grid.Row="1" Margin="20">
+			<Grid Width="390" Height="260" Background="#FFBBCCEE">
+				<ItemsControl ItemsSource="{Binding Numbers}" ItemsPanel="{DynamicResource NumbersPanelTemplate}" ItemTemplate="{DynamicResource NumberDataTemplate}"/>
+			</Grid>
+		</Viewbox>
+		<Grid Grid.Row="1" Grid.Column="1" Margin="20" Background="#FFFFEEBB">
+			<Viewbox MaxWidth="360" HorizontalAlignment="Left" VerticalAlignment="Top">
+				<Grid Width="360" Background="LightGray">
+					<ItemsControl ItemsSource="{Binding Numbers}" ItemsPanel="{DynamicResource NumbersPanelTemplate}" ItemTemplate="{DynamicResource NumberDataTemplate}"/>
+				</Grid>
+			</Viewbox>
+		</Grid>
+	</Grid>
 </Window>
