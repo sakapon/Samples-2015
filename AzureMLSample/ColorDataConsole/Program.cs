@@ -11,12 +11,12 @@ namespace ColorDataConsole
     {
         static void Main(string[] args)
         {
-            var columnNames = "Name,RGB,R,G,B,Hue,Saturation,Brightness";
+            var columnNames = "RGB,Name,R,G,B,Hue,Saturation,Brightness";
             var colorData = typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static)
                 .Where(p => p.PropertyType == typeof(Color))
                 .Select(p => (Color)p.GetValue(null))
                 .Where(c => c.A == 255) // Exclude Transparent.
-                .Select(c => string.Join(",", c.Name, string.Format("#{0:X2}{1:X2}{2:X2}", c.R, c.G, c.B), c.R, c.G, c.B, c.GetHue().ToString("N6"), c.GetSaturation().ToString("N6"), c.GetBrightness().ToString("N6")));
+                .Select(c => string.Join(",", string.Format("#{0:X2}{1:X2}{2:X2}", c.R, c.G, c.B), c.Name, c.R, c.G, c.B, c.GetHue().ToString("N6"), c.GetSaturation().ToString("N6"), c.GetBrightness().ToString("N6")));
 
             File.WriteAllLines("ColorData.csv", new[] { columnNames }.Concat(colorData));
         }
