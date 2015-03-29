@@ -12,6 +12,7 @@ namespace ColorDataConsole
     {
         static void Main(string[] args)
         {
+            CreateColorData();
             CreateColorDataJP();
         }
 
@@ -30,7 +31,7 @@ namespace ColorDataConsole
         static void CreateColorDataJP()
         {
             var columnNames = "RGB,Name,RomanName,R,G,B,Hue,Saturation,Brightness";
-            var colorData = File.ReadLines(@"..\..\..\ColorData\ColorData-JP-org.csv")
+            var colorData = File.ReadLines(@"..\..\..\ColorData\Input\ColorData-JP-org.csv")
                 .Skip(1)
                 .Select(l => l.Split(','))
                 .Select(org => new { org, c = ColorTranslator.FromHtml(org[0]) })
