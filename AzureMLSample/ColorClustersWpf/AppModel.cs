@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using KLibrary.Labs.Reactive.Models;
+using KLibrary.Labs.ObservableModel;
 
 namespace ColorClustersWpf
 {
@@ -12,18 +12,18 @@ namespace ColorClustersWpf
         const string OutputDirPath = @"..\..\..\ColorData\Output";
 
         public string[] OutputCsvs { get; private set; }
-        public IObservableProperty<string> SelectedOutputCsv { get; private set; }
+        public ISettableProperty<string> SelectedOutputCsv { get; private set; }
 
-        public IObservableGetProperty<IDictionary<int, ColorInfo[]>> Assignments { get; private set; }
+        public IGetOnlyProperty<IDictionary<int, ColorInfo[]>> Assignments { get; private set; }
 
         public AppModel()
         {
             OutputCsvs = Directory.EnumerateFiles(OutputDirPath)
                 .Select(Path.GetFileName)
                 .ToArray();
-            SelectedOutputCsv = ObservableProperty.Create(OutputCsvs.FirstOrDefault());
+            SelectedOutputCsv = ObservableProperty.CreateSettable(OutputCsvs.FirstOrDefault());
 
-            Assignments = SelectedOutputCsv.ToGetProperty(ReadAssignments);
+            Assignments = SelectedOutputCsv.SelectToGetOnly(ReadAssignments);
         }
 
         static IDictionary<int, ColorInfo[]> ReadAssignments(string csvName)
