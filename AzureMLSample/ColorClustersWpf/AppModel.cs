@@ -15,17 +15,16 @@ namespace ColorClustersWpf
 
         public ISettableProperty<string[]> OutputCsvs { get; private set; }
         public ISettableProperty<string> SelectedOutputCsv { get; private set; }
-        public ISettableProperty<IDictionary<int, ColorInfo[]>> Assignments { get; private set; }
+        public IGetOnlyProperty<IDictionary<int, ColorInfo[]>> Assignments { get; private set; }
 
         public AppModel()
         {
             // ストレージに接続する処理は非同期にしています。
             OutputCsvs = ObservableProperty.CreateSettable(new string[0]);
             SelectedOutputCsv = ObservableProperty.CreateSettable<string>(null);
-            Assignments = ObservableProperty.CreateSettable<IDictionary<int, ColorInfo[]>>(null);
+            Assignments = SelectedOutputCsv.Select(GetAssignments).ToGetOnly(null);
 
             OutputCsvs.Select(cs => cs.FirstOrDefault()).Subscribe(SelectedOutputCsv);
-            SelectedOutputCsv.Select(GetAssignments).Subscribe(Assignments);
 
             Task.Run(() => OutputCsvs.Value = GetOutputCsvs());
         }
