@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using KLibrary.Labs.ObservableModel;
 
 namespace ColorClustersWpf
@@ -11,17 +13,21 @@ namespace ColorClustersWpf
     {
         const string OutputDirPath = @"..\..\..\ColorData\Output";
 
-        public string[] OutputCsvs { get; private set; }
+        public ISettableProperty<string[]> OutputCsvs { get; private set; }
         public ISettableProperty<string> SelectedOutputCsv { get; private set; }
-
-        public IGetOnlyProperty<IDictionary<int, ColorInfo[]>> Assignments { get; private set; }
+        public ISettableProperty<IDictionary<int, ColorInfo[]>> Assignments { get; private set; }
 
         public AppModel()
         {
-            OutputCsvs = GetOutputCsvs();
-            SelectedOutputCsv = ObservableProperty.CreateSettable(OutputCsvs.FirstOrDefault());
+            // ストレージに接続する処理は非同期にしています。
+            OutputCsvs = ObservableProperty.CreateSettable(new string[0]);
+            SelectedOutputCsv = ObservableProperty.CreateSettable<string>(null);
+            Assignments = ObservableProperty.CreateSettable<IDictionary<int, ColorInfo[]>>(null);
 
-            Assignments = SelectedOutputCsv.SelectToGetOnly(GetAssignments);
+            OutputCsvs.Select(cs => cs.FirstOrDefault()).Subscribe(SelectedOutputCsv);
+            SelectedOutputCsv.Select(GetAssignments).Subscribe(Assignments);
+
+            Task.Run(() => OutputCsvs.Value = GetOutputCsvs());
         }
 
         static string[] GetOutputCsvs()

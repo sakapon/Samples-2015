@@ -22,7 +22,7 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition/>
 		</Grid.RowDefinitions>
-		<ComboBox ItemsSource="{Binding OutputCsvs}" SelectedItem="{Binding SelectedOutputCsv.Value}" Width="400" Margin="10"/>
+		<ComboBox ItemsSource="{Binding OutputCsvs.Value}" SelectedItem="{Binding SelectedOutputCsv.Value, IsAsync=True}" Width="400" Margin="10"/>
 		<Viewbox Grid.Row="1" Margin="10">
 			<ItemsControl ItemsSource="{Binding Assignments.Value}" ItemTemplate="{DynamicResource AssignmentDataTemplate}" Width="800"/>
 		</Viewbox>
