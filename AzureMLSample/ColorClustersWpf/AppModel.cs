@@ -18,15 +18,20 @@ namespace ColorClustersWpf
 
         public AppModel()
         {
-            OutputCsvs = Directory.EnumerateFiles(OutputDirPath)
-                .Select(Path.GetFileName)
-                .ToArray();
+            OutputCsvs = GetOutputCsvs();
             SelectedOutputCsv = ObservableProperty.CreateSettable(OutputCsvs.FirstOrDefault());
 
-            Assignments = SelectedOutputCsv.SelectToGetOnly(ReadAssignments);
+            Assignments = SelectedOutputCsv.SelectToGetOnly(GetAssignments);
         }
 
-        static IDictionary<int, ColorInfo[]> ReadAssignments(string csvName)
+        static string[] GetOutputCsvs()
+        {
+            return Directory.EnumerateFiles(OutputDirPath)
+                .Select(Path.GetFileName)
+                .ToArray();
+        }
+
+        static IDictionary<int, ColorInfo[]> GetAssignments(string csvName)
         {
             var csvPath = Path.Combine(OutputDirPath, csvName);
 
