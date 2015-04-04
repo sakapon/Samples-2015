@@ -4,8 +4,8 @@
         xmlns:local="clr-namespace:ColorClustersWpf" x:Class="ColorClustersWpf.MainWindow"
         Title="Color Clusters" Height="900" Width="600" FontSize="24">
 	<Window.Resources>
-		<DataTemplate x:Key="AssignmentDataTemplate">
-			<ItemsControl ItemsSource="{Binding Value}" ItemsPanel="{DynamicResource ColorsPanelTemplate}" ItemTemplate="{DynamicResource ColorDataTemplate}" Margin="6"/>
+		<DataTemplate x:Key="ClusterDataTemplate">
+			<ItemsControl ItemsSource="{Binding Colors}" ItemsPanel="{DynamicResource ColorsPanelTemplate}" ItemTemplate="{DynamicResource ColorDataTemplate}" Margin="6"/>
 		</DataTemplate>
 		<ItemsPanelTemplate x:Key="ColorsPanelTemplate">
 			<WrapPanel IsItemsHost="True"/>
@@ -24,7 +24,7 @@
 		</Grid.RowDefinitions>
 		<ComboBox ItemsSource="{Binding OutputCsvs.Value}" SelectedItem="{Binding SelectedOutputCsv.Value, IsAsync=True}" Width="400" Margin="10"/>
 		<Viewbox Grid.Row="1" Margin="10">
-			<ItemsControl ItemsSource="{Binding Assignments.Value}" ItemTemplate="{DynamicResource AssignmentDataTemplate}" Width="800"/>
+            <ItemsControl ItemsSource="{Binding Clusters.Value}" ItemTemplate="{DynamicResource ClusterDataTemplate}" Width="800"/>
 		</Viewbox>
 	</Grid>
 </Window>

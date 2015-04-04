@@ -15,14 +15,14 @@ namespace ColorClustersWpf
 
         public ISettableProperty<string[]> OutputCsvs { get; private set; }
         public ISettableProperty<string> SelectedOutputCsv { get; private set; }
-        public IGetOnlyProperty<IDictionary<int, ColorInfo[]>> Assignments { get; private set; }
+        public IGetOnlyProperty<ColorCluster[]> Clusters { get; private set; }
 
         public AppModel()
         {
             // ストレージへの接続は非同期処理です。
             OutputCsvs = ObservableProperty.CreateSettable(new string[0]);
             SelectedOutputCsv = ObservableProperty.CreateSettable<string>(null);
-            Assignments = SelectedOutputCsv.Select(GetAssignments).ToGetOnly(null);
+            Clusters = SelectedOutputCsv.Select(GetColorClusters).ToGetOnly(null);
 
             OutputCsvs.Select(cs => cs.FirstOrDefault()).Subscribe(SelectedOutputCsv);
 
@@ -36,7 +36,7 @@ namespace ColorClustersWpf
                 .ToArray();
         }
 
-        static IDictionary<int, ColorInfo[]> GetAssignments(string csvName)
+        static ColorCluster[] GetColorClusters(string csvName)
         {
             var csvPath = Path.Combine(OutputDirPath, csvName);
 
@@ -51,19 +51,35 @@ namespace ColorClustersWpf
                 .Select(l => l.Split(','))
                 .Select(r => new
                 {
-                    Assignments = Convert.ToInt32(r[columns["Assignments"]]),
-                    Info = new ColorInfo { Name = r[columns["Name"]], RGB = r[columns["RGB"]] },
-                    Color = ColorTranslator.FromHtml(r[columns["RGB"]]),
+                    ClusterId = Convert.ToInt32(r[columns["Assignments"]]),
+                    Info = new ColorInfo
+                    {
+                        Name = r[columns["Name"]],
+                        RGB = r[columns["RGB"]],
+                        Hue = ColorTranslator.FromHtml(r[columns["RGB"]]).GetHue(),
+                    },
                 })
-                .GroupBy(_ => _.Assignments)
-                .OrderBy(g => g.Average(_ => _.Color.GetHue()))
-                .ToDictionary(g => g.Key, g => g.OrderBy(_ => _.Color.GetHue()).Select(_ => _.Info).ToArray());
+                .GroupBy(_ => _.ClusterId, _ => _.Info)
+                .OrderBy(g => g.Average(c => c.Hue))
+                .Select(g => new ColorCluster
+                {
+                    Id = g.Key,
+                    Colors = g.OrderBy(c => c.Hue).ToArray(),
+                })
+                .ToArray();
         }
+    }
+
+    public struct ColorCluster
+    {
+        public int Id { get; set; }
+        public ColorInfo[] Colors { get; set; }
     }
 
     public struct ColorInfo
     {
         public string Name { get; set; }
         public string RGB { get; set; }
+        public float Hue { get; set; }
     }
 }
