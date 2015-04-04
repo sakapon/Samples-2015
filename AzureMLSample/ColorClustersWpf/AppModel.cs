@@ -19,7 +19,7 @@ namespace ColorClustersWpf
 
         public AppModel()
         {
-            // ストレージに接続する処理は非同期にしています。
+            // ストレージへの接続は非同期処理です。
             OutputCsvs = ObservableProperty.CreateSettable(new string[0]);
             SelectedOutputCsv = ObservableProperty.CreateSettable<string>(null);
             Assignments = SelectedOutputCsv.Select(GetAssignments).ToGetOnly(null);
@@ -57,7 +57,7 @@ namespace ColorClustersWpf
                 })
                 .GroupBy(_ => _.Assignments)
                 .OrderBy(g => g.Average(_ => _.Color.GetHue()))
-                .ToDictionary(g => g.Key, g => g.Select(_ => _.Info).ToArray());
+                .ToDictionary(g => g.Key, g => g.OrderBy(_ => _.Color.GetHue()).Select(_ => _.Info).ToArray());
         }
     }
 
