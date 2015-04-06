@@ -16,6 +16,9 @@ namespace ColorClustersApiConsole
 
     class Program
     {
+        const string apiUri = "abc123"; // Replace this with the API URI for the web service
+        const string apiKey = "abc123"; // Replace this with the API key for the web service
+
         static void Main(string[] args)
         {
             InvokeRequestResponseService().Wait();
@@ -34,17 +37,20 @@ namespace ColorClustersApiConsole
                             new StringTable
                             {
                                 ColumnNames = new string[] {"RGB", "Name", "R", "G", "B", "Hue", "Saturation", "Brightness"},
-                                Values = new string[,] { { "value", "value", "0", "0", "0", "0", "0", "0" }, { "value", "value", "0", "0", "0", "0", "0", "0" }, }
+                                Values = new string[,]
+                                {
+                                    { "#005CAF", "瑠璃", "0", "0", "0", "208.457100", "0", "0" },
+                                    { "#CA7A2C", "琥珀", "0", "0", "0", "29.620250", "0", "0" },
+                                    { "#1C1C1C", "墨", "0", "0", "0", "0", "0", "0" },
+                                }
                             }
                         },
                     },
                     GlobalParameters = new Dictionary<string, string>(),
                 };
-                const string apiUri = "abc123"; // Replace this with the URI for the web service
-                const string apiKey = "abc123"; // Replace this with the API key for the web service
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
 
                 client.BaseAddress = new Uri(apiUri);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
 
                 // WARNING: The 'await' statement below can result in a deadlock if you are calling this code from the UI thread of an ASP.Net application.
                 // One way to address this would be to call ConfigureAwait(false) so that the execution does not attempt to resume on the original context.
