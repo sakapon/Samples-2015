@@ -11,7 +11,6 @@
 
 #### 発行
 * 発行フォルダーの場所: ..\ClickOnceWeb1\
-* インストール フォルダーの URL: http://localhost:45865/
 * 発行者名: Abc Publisher
 * スイート名: Abc WPF
 * 製品名: ClickOnce WPF 1
@@ -24,3 +23,7 @@
 * 証明書を登録しない: 赤色の警告
 * 証明書を Root に登録: 黄色の警告 (ローカル ファイルの場合は緑)
 * 証明書を Root, TrustedPublisher に登録: 起動
+
+### 自動更新
+アプリケーションの自動更新を有効にする場合、[インストール フォルダーの URL] を指定する。
+ただし、localhost の Web サーバーでは失敗する。
