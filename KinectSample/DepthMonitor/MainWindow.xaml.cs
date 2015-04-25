@@ -57,8 +57,7 @@ namespace DepthMonitor
             sensor.Start();
 
             framesInterval = Observable.Interval(TimeSpan.FromSeconds(1 / Frequency))
-                .Select(_ => sensor)
-                .Select(GetDepthData)
+                .Select(_ => GetDepthData(sensor, (int)(1000 / Frequency)))
                 .Where(d => d != null)
                 .Select(ToBitmapData)
                 .ObserveOn(SynchronizationContext.Current)
@@ -71,13 +70,22 @@ namespace DepthMonitor
             if (sensor != null) sensor.Stop();
         }
 
-        static DepthImagePixel[] GetDepthData(KinectSensor sensor)
+        static DepthImagePixel[] GetDepthData(KinectSensor sensor, int millisecondsWait)
         {
-            using (var frame = sensor.DepthStream.OpenNextFrame((int)(1000 / Frequency)))
+            try
             {
-                if (frame == null) return null;
+                if (!sensor.IsRunning) return null;
 
-                return frame.GetRawPixelData();
+                using (var frame = sensor.DepthStream.OpenNextFrame(millisecondsWait))
+                {
+                    if (frame == null) return null;
+
+                    return frame.GetRawPixelData();
+                }
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
             }
         }
 
