@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -28,12 +29,10 @@ namespace DepthMonitor
         const double Frequency = 30;
 
         KinectSensor sensor;
-        IDisposable framesInterval;
-        DepthImagePixel[] depthData;
-        byte[] bitmapData;
         Int32Rect bitmapRect;
         int bitmapStride;
         WriteableBitmap depthBitmap;
+        IDisposable framesInterval;
 
         public MainWindow()
         {
@@ -50,8 +49,6 @@ namespace DepthMonitor
             sensor = KinectSensor.KinectSensors[0];
             sensor.DepthStream.Enable(DepthImageFormat.Resolution320x240Fps30);
 
-            depthData = new DepthImagePixel[sensor.DepthStream.FramePixelDataLength];
-            bitmapData = new byte[4 * sensor.DepthStream.FramePixelDataLength];
             bitmapRect = new Int32Rect(0, 0, sensor.DepthStream.FrameWidth, sensor.DepthStream.FrameHeight);
             bitmapStride = 4 * sensor.DepthStream.FrameWidth;
             depthBitmap = new WriteableBitmap(sensor.DepthStream.FrameWidth, sensor.DepthStream.FrameHeight, 96.0, 96.0, PixelFormats.Bgra32, null);
@@ -60,7 +57,12 @@ namespace DepthMonitor
             sensor.Start();
 
             framesInterval = Observable.Interval(TimeSpan.FromSeconds(1 / Frequency))
-                .Subscribe(_ => OnFrame());
+                .Select(_ => sensor)
+                .Select(GetDepthData)
+                .Where(d => d != null)
+                .Select(ToBitmapData)
+                .ObserveOn(SynchronizationContext.Current)
+                .Subscribe(d => depthBitmap.WritePixels(bitmapRect, d, bitmapStride, 0));
         }
 
         void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -69,14 +71,19 @@ namespace DepthMonitor
             if (sensor != null) sensor.Stop();
         }
 
-        void OnFrame()
+        static DepthImagePixel[] GetDepthData(KinectSensor sensor)
         {
-            using (var frame = sensor.DepthStream.OpenNextFrame(1000 / 60))
+            using (var frame = sensor.DepthStream.OpenNextFrame((int)(1000 / Frequency)))
             {
-                if (frame == null) return;
+                if (frame == null) return null;
 
-                frame.CopyDepthImagePixelDataTo(depthData);
+                return frame.GetRawPixelData();
             }
+        }
+
+        static byte[] ToBitmapData(DepthImagePixel[] depthData)
+        {
+            var bitmapData = new byte[4 * depthData.Length];
 
             var bitmapIndex = 0;
             foreach (var pixel in depthData)
@@ -93,7 +100,7 @@ namespace DepthMonitor
                 bitmapData[bitmapIndex++] = color.A;
             }
 
-            Dispatcher.InvokeAsync(() => depthBitmap.WritePixels(bitmapRect, bitmapData, bitmapStride, 0));
+            return bitmapData;
         }
     }
 }
