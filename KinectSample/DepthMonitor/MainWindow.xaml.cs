@@ -54,7 +54,7 @@ namespace DepthMonitor
             depthBitmap = new WriteableBitmap(sensor.DepthStream.FrameWidth, sensor.DepthStream.FrameHeight, 96.0, 96.0, PixelFormats.Bgra32, null);
 
             TheImage.Source = depthBitmap;
-            sensor.Start();
+            Task.Run(() => sensor.Start());
 
             framesInterval = Observable.Interval(TimeSpan.FromSeconds(1 / Frequency))
                 .Select(_ => GetDepthData(sensor, (int)(1000 / Frequency)))
