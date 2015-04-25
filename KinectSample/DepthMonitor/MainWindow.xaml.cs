@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,8 +25,10 @@ namespace DepthMonitor
     {
         const short DepthBound1 = 1000;
         const short DepthBound2 = 2000;
+        const double Frequency = 30;
 
         KinectSensor sensor;
+        IDisposable framesInterval;
         DepthImagePixel[] depthData;
         byte[] bitmapData;
         Int32Rect bitmapRect;
@@ -55,18 +58,18 @@ namespace DepthMonitor
 
             TheImage.Source = depthBitmap;
             sensor.Start();
-            CompositionTarget.Rendering += CompositionTarget_Rendering;
+
+            framesInterval = Observable.Interval(TimeSpan.FromSeconds(1 / Frequency))
+                .Subscribe(_ => OnFrame());
         }
 
         void MainWindow_Closing(object sender, CancelEventArgs e)
         {
-            if (sensor != null)
-            {
-                sensor.Stop();
-            }
+            if (framesInterval != null) framesInterval.Dispose();
+            if (sensor != null) sensor.Stop();
         }
 
-        void CompositionTarget_Rendering(object sender, EventArgs e)
+        void OnFrame()
         {
             using (var frame = sensor.DepthStream.OpenNextFrame(1000 / 60))
             {
@@ -90,7 +93,7 @@ namespace DepthMonitor
                 bitmapData[bitmapIndex++] = color.A;
             }
 
-            depthBitmap.WritePixels(bitmapRect, bitmapData, bitmapStride, 0);
+            Dispatcher.InvokeAsync(() => depthBitmap.WritePixels(bitmapRect, bitmapData, bitmapStride, 0));
         }
     }
 }
