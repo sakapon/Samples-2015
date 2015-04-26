@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using KLibrary.Labs.ObservableModel;
 using Microsoft.Kinect;
@@ -9,22 +10,36 @@ namespace DepthMonitor2
 {
     public class AsyncKinectManager
     {
-        public ISettableProperty<KinectSensor> Sensor { get; private set; }
+        ISettableProperty<KinectSensor> _Sensor;
+        public IGetOnlyProperty<KinectSensor> Sensor { get; private set; }
+        KinectSensor _sensorCache;
 
-        // アプリケーション起動時に既にデバイスが接続されている場合には発生しません。
-        public ISettableProperty<KinectSensor> SensorConnected { get; private set; }
-        public ISettableProperty<KinectSensor> SensorDisconnected { get; private set; }
+        // アプリケーション起動時に既にデバイスが接続されている場合も発生します。
+        public IGetOnlyProperty<KinectSensor> SensorConnected { get; private set; }
+        public IGetOnlyProperty<KinectSensor> SensorDisconnected { get; private set; }
 
         public AsyncKinectManager()
         {
-            Sensor = ObservableProperty.CreateSettable<KinectSensor>(FindSensor());
+            _Sensor = ObservableProperty.CreateSettable<KinectSensor>(null);
+            Sensor = _Sensor.ToGetOnlyMask();
 
-            SensorConnected = ObservableProperty.CreateSettable<KinectSensor>(null, true);
-            SensorDisconnected = ObservableProperty.CreateSettable<KinectSensor>(null, true);
+            SensorDisconnected = _Sensor
+                .Select(s => _sensorCache)
+                .Where(s => s != null)
+                .ToGetOnly(null, true);
+            SensorConnected = _Sensor
+                .Do(s => _sensorCache = s)
+                .Where(s => s != null)
+                .ToGetOnly(null, true);
+        }
 
+        // SensorConnected を購読した後で呼び出してください。
+        public void Initialize()
+        {
             Task.Run(() =>
             {
                 KinectSensor.KinectSensors.StatusChanged += KinectSensors_StatusChanged;
+                _Sensor.Value = FindSensor();
             });
         }
 
@@ -34,17 +49,14 @@ namespace DepthMonitor2
             {
                 if (e.Status == KinectStatus.Connected)
                 {
-                    Sensor.Value = e.Sensor;
-                    SensorConnected.OnNext(Sensor.Value);
+                    _Sensor.Value = e.Sensor;
                 }
             }
-            else
+            else if (Sensor.Value == e.Sensor)
             {
-                if (e.Sensor == Sensor.Value && e.Status != KinectStatus.Connected)
+                if (e.Status != KinectStatus.Connected)
                 {
-                    SensorDisconnected.OnNext(Sensor.Value);
-                    Sensor.Value = FindSensor();
-                    if (Sensor.Value != null) SensorConnected.OnNext(Sensor.Value);
+                    _Sensor.Value = FindSensor();
                 }
             }
         }
