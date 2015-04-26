@@ -36,7 +36,15 @@ namespace DepthMonitor2
                     _bitmapRect = new Int32Rect(0, 0, sensor.DepthStream.FrameWidth, sensor.DepthStream.FrameHeight);
                     _bitmapStride = 4 * sensor.DepthStream.FrameWidth;
 
-                    sensor.Start();
+                    try
+                    {
+                        sensor.Start();
+                    }
+                    catch (Exception ex)
+                    {
+                        // センサーが他のプロセスに既に使用されている場合に発生します。
+                        Debug.WriteLine(ex);
+                    }
                 })
                 .ObserveOn(SynchronizationContext.Current)
                 .Subscribe(_ => DepthBitmap.Value = new WriteableBitmap(_bitmapRect.Width, _bitmapRect.Height, 96.0, 96.0, PixelFormats.Bgra32, null));
@@ -72,6 +80,7 @@ namespace DepthMonitor2
             }
             catch (InvalidOperationException ex)
             {
+                // センサーが稼働していない場合に発生します。
                 Debug.WriteLine(ex);
                 return null;
             }
