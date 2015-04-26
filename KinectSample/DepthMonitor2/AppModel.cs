@@ -14,9 +14,13 @@ namespace DepthMonitor2
 {
     public class AppModel
     {
-        const short DepthBound1 = 1000;
-        const short DepthBound2 = 2000;
         const double Frequency = 30;
+
+        static readonly Func<DepthImagePixel, Color> ToColor = p =>
+            !p.IsKnownDepth ? Colors.Transparent
+            : p.Depth <= 1000 ? Colors.Orange
+            : p.Depth <= 2000 ? Colors.LightGreen
+            : Colors.Transparent;
 
         Int32Rect _bitmapRect;
         int _bitmapStride;
@@ -93,11 +97,7 @@ namespace DepthMonitor2
             var bitmapIndex = 0;
             foreach (var pixel in depthData)
             {
-                var color
-                    = !pixel.IsKnownDepth ? Colors.Transparent
-                    : pixel.Depth <= DepthBound1 ? Colors.Orange
-                    : pixel.Depth <= DepthBound2 ? Colors.LightGreen
-                    : Colors.Transparent;
+                var color = ToColor(pixel);
 
                 bitmapData[bitmapIndex++] = color.B;
                 bitmapData[bitmapIndex++] = color.G;
