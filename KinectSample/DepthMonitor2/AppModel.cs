@@ -49,7 +49,7 @@ namespace DepthMonitor2
                 .ObserveOn(SynchronizationContext.Current)
                 .Subscribe(_ => DepthBitmap.Value = new WriteableBitmap(_bitmapRect.Width, _bitmapRect.Height, 96.0, 96.0, PixelFormats.Bgra32, null));
             kinect.SensorDisconnected
-                .ObserveOn(SynchronizationContext.Current)
+                .Do(sensor => sensor.Stop())
                 .Subscribe(_ => DepthBitmap.Value = null);
             kinect.Initialize();
 
