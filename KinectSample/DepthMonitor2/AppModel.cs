@@ -18,8 +18,8 @@ namespace DepthMonitor2
         const short DepthBound2 = 2000;
         const double Frequency = 30;
 
-        Int32Rect bitmapRect;
-        int bitmapStride;
+        Int32Rect _bitmapRect;
+        int _bitmapStride;
 
         public ISettableProperty<WriteableBitmap> DepthBitmap { get; private set; }
 
@@ -27,27 +27,34 @@ namespace DepthMonitor2
         {
             DepthBitmap = ObservableProperty.CreateSettable<WriteableBitmap>(null);
 
-            var kinectManager = new AsyncKinectManager();
-            kinectManager.SensorConnected
+            var kinect = new AsyncKinectManager();
+            kinect.SensorConnected
                 .Do(sensor =>
                 {
                     sensor.DepthStream.Enable(DepthImageFormat.Resolution320x240Fps30);
 
-                    bitmapRect = new Int32Rect(0, 0, sensor.DepthStream.FrameWidth, sensor.DepthStream.FrameHeight);
-                    bitmapStride = 4 * sensor.DepthStream.FrameWidth;
+                    _bitmapRect = new Int32Rect(0, 0, sensor.DepthStream.FrameWidth, sensor.DepthStream.FrameHeight);
+                    _bitmapStride = 4 * sensor.DepthStream.FrameWidth;
 
                     sensor.Start();
                 })
                 .ObserveOn(SynchronizationContext.Current)
-                .Subscribe(_ => DepthBitmap.Value = new WriteableBitmap(bitmapRect.Width, bitmapRect.Height, 96.0, 96.0, PixelFormats.Bgra32, null));
-            kinectManager.Initialize();
+                .Subscribe(_ => DepthBitmap.Value = new WriteableBitmap(_bitmapRect.Width, _bitmapRect.Height, 96.0, 96.0, PixelFormats.Bgra32, null));
+            kinect.SensorDisconnected
+                .ObserveOn(SynchronizationContext.Current)
+                .Subscribe(_ => DepthBitmap.Value = null);
+            kinect.Initialize();
 
             Observable.Interval(TimeSpan.FromSeconds(1 / Frequency))
-                .Select(_ => GetDepthData(kinectManager.Sensor.Value, (int)(1000 / Frequency)))
+                .Select(_ => GetDepthData(kinect.Sensor.Value, (int)(1000 / Frequency)))
                 .Where(d => d != null)
                 .Select(ToBitmapData)
                 .ObserveOn(SynchronizationContext.Current)
-                .Subscribe(d => DepthBitmap.Value.WritePixels(bitmapRect, d, bitmapStride, 0));
+                .Subscribe(d =>
+                {
+                    var b = DepthBitmap.Value;
+                    if (b != null) DepthBitmap.Value.WritePixels(_bitmapRect, d, _bitmapStride, 0);
+                });
         }
 
         static DepthImagePixel[] GetDepthData(KinectSensor sensor, int millisecondsWait)
