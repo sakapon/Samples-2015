@@ -1,8 +1,12 @@
-﻿<Window x:Class="KinectArchWpf.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+        xmlns:local="clr-namespace:KinectArchWpf" x:Class="KinectArchWpf.MainWindow"
+        Title="MainWindow" Height="400" Width="600">
+	<Window.DataContext>
+		<local:AppModel/>
+	</Window.DataContext>
+	<Grid>
+		<TextBlock Text="{Binding PositionText.Value}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36"/>
+	</Grid>
 </Window>
