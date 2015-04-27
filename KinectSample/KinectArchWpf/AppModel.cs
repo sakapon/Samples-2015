@@ -23,7 +23,7 @@ namespace KinectArchWpf
             kinect.SensorConnected
                 .Subscribe(sensor =>
                 {
-                    sensor.SkeletonStream.Enable();
+                    sensor.SkeletonStream.EnableWithDefaultSmoothing();
 
                     try
                     {
