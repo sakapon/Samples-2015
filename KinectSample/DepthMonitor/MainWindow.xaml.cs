@@ -77,7 +77,7 @@ namespace DepthMonitor
         {
             try
             {
-                if (!sensor.IsRunning) return null;
+                if (sensor == null || !sensor.IsRunning) return null;
 
                 using (var frame = sensor.DepthStream.OpenNextFrame(millisecondsWait))
                 {
@@ -88,6 +88,7 @@ namespace DepthMonitor
             }
             catch (InvalidOperationException)
             {
+                // センサーが稼働していないときにフレームを取得すると発生します。
                 return null;
             }
         }

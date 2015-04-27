@@ -84,7 +84,7 @@ namespace DepthMonitor2
             }
             catch (InvalidOperationException ex)
             {
-                // センサーが稼働していない場合に発生します。
+                // センサーが稼働していないときにフレームを取得すると発生します。
                 Debug.WriteLine(ex);
                 return null;
             }
