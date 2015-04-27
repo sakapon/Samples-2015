@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
@@ -43,7 +42,7 @@ namespace DepthMonitor
             InitializeComponent();
 
             Loaded += MainWindow_Loaded;
-            Closing += MainWindow_Closing;
+            Closed += MainWindow_Closed;
         }
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -68,7 +67,7 @@ namespace DepthMonitor
                 .Subscribe(d => depthBitmap.WritePixels(bitmapRect, d, bitmapStride, 0));
         }
 
-        void MainWindow_Closing(object sender, CancelEventArgs e)
+        void MainWindow_Closed(object sender, EventArgs e)
         {
             if (framesInterval != null) framesInterval.Dispose();
             if (sensor != null) sensor.Stop();
