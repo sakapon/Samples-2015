@@ -24,9 +24,13 @@ namespace DepthMonitor
     /// </summary>
     public partial class MainWindow : Window
     {
-        const short DepthBound1 = 1000;
-        const short DepthBound2 = 2000;
         const double Frequency = 30;
+
+        static readonly Func<DepthImagePixel, Color> ToColor = p =>
+            !p.IsKnownDepth ? Colors.Transparent
+            : p.Depth <= 1000 ? Colors.Orange
+            : p.Depth <= 2000 ? Colors.LightGreen
+            : Colors.Transparent;
 
         KinectSensor sensor;
         Int32Rect bitmapRect;
@@ -96,11 +100,7 @@ namespace DepthMonitor
             var bitmapIndex = 0;
             foreach (var pixel in depthData)
             {
-                var color
-                    = !pixel.IsKnownDepth ? Colors.Transparent
-                    : pixel.Depth <= DepthBound1 ? Colors.Orange
-                    : pixel.Depth <= DepthBound2 ? Colors.LightGreen
-                    : Colors.Transparent;
+                var color = ToColor(pixel);
 
                 bitmapData[bitmapIndex++] = color.B;
                 bitmapData[bitmapIndex++] = color.G;
