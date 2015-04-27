@@ -65,7 +65,7 @@ namespace DepthMonitor2
                 .Subscribe(d =>
                 {
                     var b = DepthBitmap.Value;
-                    if (b != null) DepthBitmap.Value.WritePixels(_bitmapRect, d, _bitmapStride, 0);
+                    if (b != null) b.WritePixels(_bitmapRect, d, _bitmapStride, 0);
                 });
         }
 
