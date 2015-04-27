@@ -56,6 +56,27 @@ namespace KinectArchWpf
             }
         }
 
+        public static byte[] GetColorData(this KinectSensor sensor, TimeSpan timeout)
+        {
+            if (sensor == null || !sensor.IsRunning) return null;
+
+            try
+            {
+                using (var frame = sensor.ColorStream.OpenNextFrame((int)timeout.TotalMilliseconds))
+                {
+                    if (frame == null) return null;
+
+                    return frame.GetRawPixelData();
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                // センサーが稼働していない、またはストリームが有効になっていないときにフレームを取得すると発生します。
+                Debug.WriteLine(ex);
+                return null;
+            }
+        }
+
         public static DepthImagePixel[] GetDepthData(this KinectSensor sensor, TimeSpan timeout)
         {
             if (sensor == null || !sensor.IsRunning) return null;

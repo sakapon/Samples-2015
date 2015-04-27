@@ -14,12 +14,10 @@ namespace KinectArchWpf
         const double Frequency = 30;
         static readonly TimeSpan FramesInterval = TimeSpan.FromSeconds(1 / Frequency);
 
-        public ISettableProperty<string> PositionText { get; private set; }
+        public IGetOnlyProperty<string> PositionText { get; private set; }
 
         public AppModel()
         {
-            PositionText = ObservableProperty.CreateSettable("");
-
             var kinect = new AsyncKinectManager();
             kinect.SensorConnected
                 .Subscribe(sensor =>
@@ -40,11 +38,14 @@ namespace KinectArchWpf
                 .Subscribe(sensor => sensor.Stop());
             kinect.Initialize();
 
-            Observable.Interval(FramesInterval)
+            var skeletonData = Observable.Interval(FramesInterval)
                 .Select(_ => kinect.Sensor.Value.GetSkeletonData(FramesInterval))
+                .ToGetOnly(null);
+
+            PositionText = skeletonData
                 .Select(GetPosition)
                 .Select(p => p.HasValue ? SkeletonPointToString(p.Value) : "")
-                .Subscribe(PositionText);
+                .ToGetOnly("");
         }
 
         static SkeletonPoint? GetPosition(Skeleton[] skeletonData)
