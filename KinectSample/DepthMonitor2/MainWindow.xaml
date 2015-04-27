@@ -1,0 +1,12 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:DepthMonitor2" x:Class="DepthMonitor2.MainWindow"
+        Title="Depth Monitor" Height="350" Width="525" WindowState="Maximized">
+	<Window.DataContext>
+		<local:AppModel/>
+	</Window.DataContext>
+	<Grid>
+		<Image Source="{Binding DepthBitmap.Value}"/>
+	</Grid>
+</Window>
