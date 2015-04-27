@@ -12,6 +12,7 @@ namespace KinectArchWpf
     public class AppModel
     {
         const double Frequency = 30;
+        static readonly TimeSpan FramesInterval = TimeSpan.FromSeconds(1 / Frequency);
 
         public ISettableProperty<string> PositionText { get; private set; }
 
@@ -39,34 +40,11 @@ namespace KinectArchWpf
                 .Subscribe(sensor => sensor.Stop());
             kinect.Initialize();
 
-            Observable.Interval(TimeSpan.FromSeconds(1 / Frequency))
-                .Select(_ => GetSkeletonData(kinect.Sensor.Value, (int)(1000 / Frequency)))
+            Observable.Interval(FramesInterval)
+                .Select(_ => kinect.Sensor.Value.GetSkeletonData(FramesInterval))
                 .Select(GetPosition)
                 .Select(p => p.HasValue ? SkeletonPointToString(p.Value) : "")
                 .Subscribe(PositionText);
-        }
-
-        static Skeleton[] GetSkeletonData(KinectSensor sensor, int millisecondsWait)
-        {
-            try
-            {
-                if (sensor == null || !sensor.IsRunning) return null;
-
-                using (var frame = sensor.SkeletonStream.OpenNextFrame(millisecondsWait))
-                {
-                    if (frame == null) return null;
-
-                    var skeletonData = new Skeleton[frame.SkeletonArrayLength];
-                    frame.CopySkeletonDataTo(skeletonData);
-                    return skeletonData;
-                }
-            }
-            catch (InvalidOperationException ex)
-            {
-                // センサーが稼働していないときにフレームを取得すると発生します。
-                Debug.WriteLine(ex);
-                return null;
-            }
         }
 
         static SkeletonPoint? GetPosition(Skeleton[] skeletonData)
