@@ -77,13 +77,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="..\KinectArchWpf\AsyncKinectManager.cs">
+      <Link>AsyncKinectManager.cs</Link>
+    </Compile>
+    <Compile Include="..\KinectArchWpf\KinectHelper.cs">
+      <Link>KinectHelper.cs</Link>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AppModel.cs" />
     <Compile Include="AsyncKinectManager0.cs" />
-    <Compile Include="AsyncKinectManager.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
