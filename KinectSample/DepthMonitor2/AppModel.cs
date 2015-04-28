@@ -16,6 +16,7 @@ namespace DepthMonitor2
     public class AppModel
     {
         const double Frequency = 30;
+        static readonly TimeSpan FramesInterval = TimeSpan.FromSeconds(1 / Frequency);
 
         static readonly Func<DepthImagePixel, Color> ToColor = p =>
             !p.IsKnownDepth ? Colors.Transparent
@@ -58,8 +59,8 @@ namespace DepthMonitor2
                 .Subscribe(_ => DepthBitmap.Value = null);
             kinect.Initialize();
 
-            Observable.Interval(TimeSpan.FromSeconds(1 / Frequency))
-                .Select(_ => GetDepthData(kinect.Sensor.Value, (int)(1000 / Frequency)))
+            Observable.Interval(FramesInterval)
+                .Select(_ => kinect.Sensor.Value.GetDepthData(FramesInterval))
                 .Where(d => d != null)
                 .Select(ToBitmapData)
                 .ObserveOn(SynchronizationContext.Current)
@@ -68,27 +69,6 @@ namespace DepthMonitor2
                     var b = DepthBitmap.Value;
                     if (b != null) b.WritePixels(_bitmapRect, d, _bitmapStride, 0);
                 });
-        }
-
-        static DepthImagePixel[] GetDepthData(KinectSensor sensor, int millisecondsWait)
-        {
-            try
-            {
-                if (sensor == null || !sensor.IsRunning) return null;
-
-                using (var frame = sensor.DepthStream.OpenNextFrame(millisecondsWait))
-                {
-                    if (frame == null) return null;
-
-                    return frame.GetRawPixelData();
-                }
-            }
-            catch (InvalidOperationException ex)
-            {
-                // センサーが稼働していないときにフレームを取得すると発生します。
-                Debug.WriteLine(ex);
-                return null;
-            }
         }
 
         static byte[] ToBitmapData(DepthImagePixel[] depthData)
