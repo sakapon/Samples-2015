@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
-using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using KinectArchWpf;
@@ -24,8 +23,7 @@ namespace DepthMonitor2
             : p.Depth <= 2000 ? Colors.LightGreen
             : Colors.Transparent;
 
-        Int32Rect _bitmapRect;
-        int _bitmapStride;
+        static readonly DepthBitmapInfo DepthBitmapInfo = KinectHelper.GetDepthBitmapInfo(DepthImageFormat.Resolution320x240Fps30);
 
         public ISettableProperty<WriteableBitmap> DepthBitmap { get; private set; }
 
@@ -37,10 +35,7 @@ namespace DepthMonitor2
             kinect.SensorConnected
                 .Do(sensor =>
                 {
-                    sensor.DepthStream.Enable(DepthImageFormat.Resolution320x240Fps30);
-
-                    _bitmapRect = new Int32Rect(0, 0, sensor.DepthStream.FrameWidth, sensor.DepthStream.FrameHeight);
-                    _bitmapStride = 4 * sensor.DepthStream.FrameWidth;
+                    sensor.DepthStream.Enable(DepthBitmapInfo.Format);
 
                     try
                     {
@@ -53,7 +48,7 @@ namespace DepthMonitor2
                     }
                 })
                 .ObserveOn(SynchronizationContext.Current)
-                .Subscribe(_ => DepthBitmap.Value = new WriteableBitmap(_bitmapRect.Width, _bitmapRect.Height, 96.0, 96.0, PixelFormats.Bgra32, null));
+                .Subscribe(_ => DepthBitmap.Value = DepthBitmapInfo.CreateBitmap());
             kinect.SensorDisconnected
                 .Do(sensor => sensor.Stop())
                 .Subscribe(_ => DepthBitmap.Value = null);
@@ -64,16 +59,12 @@ namespace DepthMonitor2
                 .Where(d => d != null)
                 .Select(ToBitmapData)
                 .ObserveOn(SynchronizationContext.Current)
-                .Subscribe(d =>
-                {
-                    var b = DepthBitmap.Value;
-                    if (b != null) b.WritePixels(_bitmapRect, d, _bitmapStride, 0);
-                });
+                .Subscribe(d => DepthBitmapInfo.WritePixels(DepthBitmap.Value, d));
         }
 
         static byte[] ToBitmapData(DepthImagePixel[] depthData)
         {
-            var bitmapData = new byte[4 * depthData.Length];
+            var bitmapData = new byte[DepthBitmapInfo.PixelBytesLength];
 
             var bitmapIndex = 0;
             foreach (var pixel in depthData)
