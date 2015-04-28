@@ -14,8 +14,7 @@ namespace DepthMonitor2
 {
     public class AppModel
     {
-        const double Frequency = 30;
-        static readonly TimeSpan FramesInterval = TimeSpan.FromSeconds(1 / Frequency);
+        static readonly TimeSpan FramesInterval = TimeSpan.FromSeconds(1 / 30);
 
         static readonly Func<DepthImagePixel, Color> ToColor = p =>
             !p.IsKnownDepth ? Colors.Transparent
@@ -25,15 +24,17 @@ namespace DepthMonitor2
 
         static readonly DepthBitmapInfo DepthBitmapInfo = KinectHelper.GetDepthBitmapInfo(DepthImageFormat.Resolution320x240Fps30);
 
-        public ISettableProperty<WriteableBitmap> DepthBitmap { get; private set; }
+        public IGetOnlyProperty<WriteableBitmap> DepthBitmap { get; private set; }
 
         public AppModel()
         {
-            DepthBitmap = ObservableProperty.CreateSettable<WriteableBitmap>(null);
-
             var kinect = new AsyncKinectManager();
+            DepthBitmap = kinect.Sensor
+                .ObserveOn(SynchronizationContext.Current)
+                .Select(sensor => sensor != null ? DepthBitmapInfo.CreateBitmap() : null)
+                .ToGetOnly(null);
             kinect.SensorConnected
-                .Do(sensor =>
+                .Subscribe(sensor =>
                 {
                     sensor.DepthStream.Enable(DepthBitmapInfo.Format);
 
@@ -46,12 +47,9 @@ namespace DepthMonitor2
                         // センサーが他のプロセスに既に使用されている場合に発生します。
                         Debug.WriteLine(ex);
                     }
-                })
-                .ObserveOn(SynchronizationContext.Current)
-                .Subscribe(_ => DepthBitmap.Value = DepthBitmapInfo.CreateBitmap());
+                });
             kinect.SensorDisconnected
-                .Do(sensor => sensor.Stop())
-                .Subscribe(_ => DepthBitmap.Value = null);
+                .Subscribe(sensor => sensor.Stop());
             kinect.Initialize();
 
             Observable.Interval(FramesInterval)
