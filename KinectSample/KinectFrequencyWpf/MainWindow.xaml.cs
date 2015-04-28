@@ -23,10 +23,10 @@ namespace KinectFrequencyWpf
     /// </summary>
     public partial class MainWindow : Window
     {
-        const double Frequency = 30;
+        static readonly TimeSpan FramesInterval = TimeSpan.FromSeconds(1 / 30.0);
 
         KinectSensor sensor;
-        IDisposable framesInterval;
+        IDisposable framesSubscription;
 
         public MainWindow()
         {
@@ -45,8 +45,8 @@ namespace KinectFrequencyWpf
 
             Task.Run(() => sensor.Start());
 
-            framesInterval = Observable.Interval(TimeSpan.FromSeconds(1 / Frequency))
-                .Select(_ => GetSkeletonData(sensor, (int)(1000 / Frequency)))
+            framesSubscription = Observable.Interval(FramesInterval)
+                .Select(_ => GetSkeletonData(sensor, (int)FramesInterval.TotalMilliseconds))
                 .Select(GetPosition)
                 .Select(p => p.HasValue ? SkeletonPointToString(p.Value) : "")
                 .ObserveOn(SynchronizationContext.Current)
@@ -55,7 +55,7 @@ namespace KinectFrequencyWpf
 
         void MainWindow_Closed(object sender, EventArgs e)
         {
-            if (framesInterval != null) framesInterval.Dispose();
+            if (framesSubscription != null) framesSubscription.Dispose();
             if (sensor != null) sensor.Stop();
         }
 

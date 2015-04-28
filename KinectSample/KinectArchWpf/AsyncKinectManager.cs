@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using KLibrary.Labs.ObservableModel;
 using Microsoft.Kinect;
 
-namespace DepthMonitor2
+namespace KinectArchWpf
 {
     public class AsyncKinectManager
     {

@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
-using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using KinectArchWpf;
 using KLibrary.Labs.ObservableModel;
 using Microsoft.Kinect;
 
@@ -14,31 +14,22 @@ namespace DepthMonitor2
 {
     public class AppModel
     {
-        const double Frequency = 30;
+        static readonly TimeSpan FramesInterval = TimeSpan.FromSeconds(1 / 30.0);
+        static readonly DepthBitmapInfo DepthBitmapInfo = BitmapInfo.ForDepth(DepthImageFormat.Resolution320x240Fps30);
 
-        static readonly Func<DepthImagePixel, Color> ToColor = p =>
-            !p.IsKnownDepth ? Colors.Transparent
-            : p.Depth <= 1000 ? Colors.Orange
-            : p.Depth <= 2000 ? Colors.LightGreen
-            : Colors.Transparent;
-
-        Int32Rect _bitmapRect;
-        int _bitmapStride;
-
-        public ISettableProperty<WriteableBitmap> DepthBitmap { get; private set; }
+        public IGetOnlyProperty<WriteableBitmap> DepthBitmap { get; private set; }
 
         public AppModel()
         {
-            DepthBitmap = ObservableProperty.CreateSettable<WriteableBitmap>(null);
-
             var kinect = new AsyncKinectManager();
+            DepthBitmap = kinect.Sensor
+                .ObserveOn(SynchronizationContext.Current)
+                .Select(sensor => sensor != null ? DepthBitmapInfo.CreateBitmap() : null)
+                .ToGetOnly(null);
             kinect.SensorConnected
-                .Do(sensor =>
+                .Subscribe(sensor =>
                 {
-                    sensor.DepthStream.Enable(DepthImageFormat.Resolution320x240Fps30);
-
-                    _bitmapRect = new Int32Rect(0, 0, sensor.DepthStream.FrameWidth, sensor.DepthStream.FrameHeight);
-                    _bitmapStride = 4 * sensor.DepthStream.FrameWidth;
+                    sensor.DepthStream.Enable(DepthBitmapInfo.Format);
 
                     try
                     {
@@ -49,63 +40,41 @@ namespace DepthMonitor2
                         // センサーが他のプロセスに既に使用されている場合に発生します。
                         Debug.WriteLine(ex);
                     }
-                })
-                .ObserveOn(SynchronizationContext.Current)
-                .Subscribe(_ => DepthBitmap.Value = new WriteableBitmap(_bitmapRect.Width, _bitmapRect.Height, 96.0, 96.0, PixelFormats.Bgra32, null));
+                });
             kinect.SensorDisconnected
-                .Do(sensor => sensor.Stop())
-                .Subscribe(_ => DepthBitmap.Value = null);
+                .Subscribe(sensor => sensor.Stop());
             kinect.Initialize();
 
-            Observable.Interval(TimeSpan.FromSeconds(1 / Frequency))
-                .Select(_ => GetDepthData(kinect.Sensor.Value, (int)(1000 / Frequency)))
+            Observable.Interval(FramesInterval)
+                .Select(_ => kinect.Sensor.Value.GetDepthData(FramesInterval))
                 .Where(d => d != null)
                 .Select(ToBitmapData)
                 .ObserveOn(SynchronizationContext.Current)
-                .Subscribe(d =>
-                {
-                    var b = DepthBitmap.Value;
-                    if (b != null) DepthBitmap.Value.WritePixels(_bitmapRect, d, _bitmapStride, 0);
-                });
-        }
-
-        static DepthImagePixel[] GetDepthData(KinectSensor sensor, int millisecondsWait)
-        {
-            try
-            {
-                if (sensor == null || !sensor.IsRunning) return null;
-
-                using (var frame = sensor.DepthStream.OpenNextFrame(millisecondsWait))
-                {
-                    if (frame == null) return null;
-
-                    return frame.GetRawPixelData();
-                }
-            }
-            catch (InvalidOperationException ex)
-            {
-                // センサーが稼働していないときにフレームを取得すると発生します。
-                Debug.WriteLine(ex);
-                return null;
-            }
+                .Subscribe(d => DepthBitmapInfo.WritePixels(DepthBitmap.Value, d));
         }
 
         static byte[] ToBitmapData(DepthImagePixel[] depthData)
         {
-            var bitmapData = new byte[4 * depthData.Length];
+            var bitmapData = new byte[DepthBitmapInfo.PixelBytesLength];
 
-            var bitmapIndex = 0;
+            var i = 0;
             foreach (var pixel in depthData)
             {
                 var color = ToColor(pixel);
 
-                bitmapData[bitmapIndex++] = color.B;
-                bitmapData[bitmapIndex++] = color.G;
-                bitmapData[bitmapIndex++] = color.R;
-                bitmapData[bitmapIndex++] = color.A;
+                bitmapData[i++] = color.B;
+                bitmapData[i++] = color.G;
+                bitmapData[i++] = color.R;
+                bitmapData[i++] = color.A;
             }
 
             return bitmapData;
         }
+
+        static readonly Func<DepthImagePixel, Color> ToColor = p =>
+            !p.IsKnownDepth ? Colors.Transparent
+            : p.Depth <= 1000 ? Colors.Orange
+            : p.Depth <= 2000 ? Colors.LightGreen
+            : Colors.Transparent;
     }
 }

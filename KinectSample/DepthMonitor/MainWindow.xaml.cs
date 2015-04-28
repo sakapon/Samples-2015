@@ -23,19 +23,13 @@ namespace DepthMonitor
     /// </summary>
     public partial class MainWindow : Window
     {
-        const double Frequency = 30;
-
-        static readonly Func<DepthImagePixel, Color> ToColor = p =>
-            !p.IsKnownDepth ? Colors.Transparent
-            : p.Depth <= 1000 ? Colors.Orange
-            : p.Depth <= 2000 ? Colors.LightGreen
-            : Colors.Transparent;
+        static readonly TimeSpan FramesInterval = TimeSpan.FromSeconds(1 / 30.0);
 
         KinectSensor sensor;
         Int32Rect bitmapRect;
         int bitmapStride;
         WriteableBitmap depthBitmap;
-        IDisposable framesInterval;
+        IDisposable framesSubscription;
 
         public MainWindow()
         {
@@ -59,8 +53,8 @@ namespace DepthMonitor
             TheImage.Source = depthBitmap;
             Task.Run(() => sensor.Start());
 
-            framesInterval = Observable.Interval(TimeSpan.FromSeconds(1 / Frequency))
-                .Select(_ => GetDepthData(sensor, (int)(1000 / Frequency)))
+            framesSubscription = Observable.Interval(FramesInterval)
+                .Select(_ => GetDepthData(sensor, (int)FramesInterval.TotalMilliseconds))
                 .Where(d => d != null)
                 .Select(ToBitmapData)
                 .ObserveOn(SynchronizationContext.Current)
@@ -69,7 +63,7 @@ namespace DepthMonitor
 
         void MainWindow_Closed(object sender, EventArgs e)
         {
-            if (framesInterval != null) framesInterval.Dispose();
+            if (framesSubscription != null) framesSubscription.Dispose();
             if (sensor != null) sensor.Stop();
         }
 
@@ -97,18 +91,24 @@ namespace DepthMonitor
         {
             var bitmapData = new byte[4 * depthData.Length];
 
-            var bitmapIndex = 0;
+            var i = 0;
             foreach (var pixel in depthData)
             {
                 var color = ToColor(pixel);
 
-                bitmapData[bitmapIndex++] = color.B;
-                bitmapData[bitmapIndex++] = color.G;
-                bitmapData[bitmapIndex++] = color.R;
-                bitmapData[bitmapIndex++] = color.A;
+                bitmapData[i++] = color.B;
+                bitmapData[i++] = color.G;
+                bitmapData[i++] = color.R;
+                bitmapData[i++] = color.A;
             }
 
             return bitmapData;
         }
+
+        static readonly Func<DepthImagePixel, Color> ToColor = p =>
+            !p.IsKnownDepth ? Colors.Transparent
+            : p.Depth <= 1000 ? Colors.Orange
+            : p.Depth <= 2000 ? Colors.LightGreen
+            : Colors.Transparent;
     }
 }
