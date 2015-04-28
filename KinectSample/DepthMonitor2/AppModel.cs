@@ -34,20 +34,13 @@ namespace DepthMonitor2
                 .Select(sensor => sensor != null ? DepthBitmapInfo.CreateBitmap() : null)
                 .ToGetOnly(null);
             kinect.SensorConnected
-                .Subscribe(sensor =>
+                .Do(sensor =>
                 {
                     sensor.DepthStream.Enable(DepthBitmapInfo.Format);
-
-                    try
-                    {
-                        sensor.Start();
-                    }
-                    catch (Exception ex)
-                    {
-                        // センサーが他のプロセスに既に使用されている場合に発生します。
-                        Debug.WriteLine(ex);
-                    }
-                });
+                    sensor.Start();
+                })
+                // センサーが他のプロセスに既に使用されている場合に発生します。
+                .Subscribe(_ => { }, ex => Debug.WriteLine(ex));
             kinect.SensorDisconnected
                 .Subscribe(sensor => sensor.Stop());
             kinect.Initialize();
