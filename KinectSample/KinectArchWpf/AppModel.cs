@@ -11,8 +11,7 @@ namespace KinectArchWpf
 {
     public class AppModel
     {
-        const double Frequency = 30;
-        static readonly TimeSpan FramesInterval = TimeSpan.FromSeconds(1 / Frequency);
+        static readonly TimeSpan FramesInterval = TimeSpan.FromSeconds(1 / 30);
 
         public IGetOnlyProperty<string> PositionText { get; private set; }
 

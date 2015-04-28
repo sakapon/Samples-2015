@@ -15,13 +15,6 @@ namespace DepthMonitor2
     public class AppModel
     {
         static readonly TimeSpan FramesInterval = TimeSpan.FromSeconds(1 / 30);
-
-        static readonly Func<DepthImagePixel, Color> ToColor = p =>
-            !p.IsKnownDepth ? Colors.Transparent
-            : p.Depth <= 1000 ? Colors.Orange
-            : p.Depth <= 2000 ? Colors.LightGreen
-            : Colors.Transparent;
-
         static readonly DepthBitmapInfo DepthBitmapInfo = KinectHelper.GetDepthBitmapInfo(DepthImageFormat.Resolution320x240Fps30);
 
         public IGetOnlyProperty<WriteableBitmap> DepthBitmap { get; private set; }
@@ -77,5 +70,11 @@ namespace DepthMonitor2
 
             return bitmapData;
         }
+
+        static readonly Func<DepthImagePixel, Color> ToColor = p =>
+            !p.IsKnownDepth ? Colors.Transparent
+            : p.Depth <= 1000 ? Colors.Orange
+            : p.Depth <= 2000 ? Colors.LightGreen
+            : Colors.Transparent;
     }
 }
