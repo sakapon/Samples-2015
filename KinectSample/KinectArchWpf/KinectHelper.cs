@@ -100,20 +100,20 @@ namespace KinectArchWpf
                 return null;
             }
         }
+    }
 
-        public static ColorBitmapInfo GetColorBitmapInfo(ColorImageFormat format)
+    public abstract class BitmapInfo
+    {
+        public static ColorBitmapInfo ForColor(ColorImageFormat format)
         {
             return new ColorBitmapInfo(format, PixelFormats.Bgr32, 4);
         }
 
-        public static DepthBitmapInfo GetDepthBitmapInfo(DepthImageFormat format)
+        public static DepthBitmapInfo ForDepth(DepthImageFormat format)
         {
             return new DepthBitmapInfo(format, PixelFormats.Bgra32, 4);
         }
-    }
 
-    public abstract class BitmapInfoBase
-    {
         public int Width { get; private set; }
         public int Height { get; private set; }
 
@@ -156,7 +156,7 @@ namespace KinectArchWpf
         }
     }
 
-    public class ColorBitmapInfo : BitmapInfoBase
+    public class ColorBitmapInfo : BitmapInfo
     {
         public ColorImageFormat Format { get; private set; }
 
@@ -184,7 +184,7 @@ namespace KinectArchWpf
         }
     }
 
-    public class DepthBitmapInfo : BitmapInfoBase
+    public class DepthBitmapInfo : BitmapInfo
     {
         public DepthImageFormat Format { get; private set; }
 

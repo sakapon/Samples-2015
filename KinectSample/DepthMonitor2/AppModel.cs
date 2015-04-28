@@ -15,7 +15,7 @@ namespace DepthMonitor2
     public class AppModel
     {
         static readonly TimeSpan FramesInterval = TimeSpan.FromSeconds(1 / 30);
-        static readonly DepthBitmapInfo DepthBitmapInfo = KinectHelper.GetDepthBitmapInfo(DepthImageFormat.Resolution320x240Fps30);
+        static readonly DepthBitmapInfo DepthBitmapInfo = BitmapInfo.ForDepth(DepthImageFormat.Resolution320x240Fps30);
 
         public IGetOnlyProperty<WriteableBitmap> DepthBitmap { get; private set; }
 
