@@ -64,15 +64,15 @@ namespace DepthMonitor2
         {
             var bitmapData = new byte[DepthBitmapInfo.PixelBytesLength];
 
-            var bitmapIndex = 0;
+            var i = 0;
             foreach (var pixel in depthData)
             {
                 var color = ToColor(pixel);
 
-                bitmapData[bitmapIndex++] = color.B;
-                bitmapData[bitmapIndex++] = color.G;
-                bitmapData[bitmapIndex++] = color.R;
-                bitmapData[bitmapIndex++] = color.A;
+                bitmapData[i++] = color.B;
+                bitmapData[i++] = color.G;
+                bitmapData[i++] = color.R;
+                bitmapData[i++] = color.A;
             }
 
             return bitmapData;
