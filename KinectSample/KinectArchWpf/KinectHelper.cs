@@ -117,12 +117,11 @@ namespace KinectArchWpf
         public int Width { get; private set; }
         public int Height { get; private set; }
 
+        public int BytesPerPixel { get; private set; }
         public int PixelsCount { get; private set; }
         public int PixelBytesLength { get; private set; }
 
         PixelFormat _pixelFormat;
-        int _bytesPerPixel;
-
         Int32Rect _rect;
         int _stride;
 
@@ -131,12 +130,11 @@ namespace KinectArchWpf
             Width = width;
             Height = height;
 
+            BytesPerPixel = bytesPerPixel;
             PixelsCount = width * height;
             PixelBytesLength = bytesPerPixel * PixelsCount;
 
             _pixelFormat = pixelFormat;
-            _bytesPerPixel = bytesPerPixel;
-
             _rect = new Int32Rect(0, 0, width, height);
             _stride = bytesPerPixel * width;
         }
