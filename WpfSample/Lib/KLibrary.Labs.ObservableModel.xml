@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>KLibrary.Labs.ObservableModel</name>
+    </assembly>
+    <members>
+        <member name="T:KLibrary.Labs.ObservableModel.IObservable2`1">
+            <summary>
+            Represents an extended <see cref="T:System.IObservable`1"/>.
+            </summary>
+            <typeparam name="T">The type of objects to be provided.</typeparam>
+        </member>
+        <member name="P:KLibrary.Labs.ObservableModel.IObservable2`1.HasObservers">
+            <summary>
+            Gets a value indicating whether this observable object has observers.
+            </summary>
+        </member>
+        <member name="T:KLibrary.Labs.ObservableModel.IJunction`1">
+            <summary>
+            Represents an IObservable-based event.
+            </summary>
+            <typeparam name="T">The type of objects to be provided.</typeparam>
+        </member>
+        <member name="T:KLibrary.Labs.ObservableModel.ISettableProperty`1">
+            <summary>
+            Represents an IObservable-based settable property.
+            </summary>
+            <typeparam name="T">The type of the property.</typeparam>
+        </member>
+        <member name="P:KLibrary.Labs.ObservableModel.ISettableProperty`1.Value">
+            <summary>
+            Gets or sets the value of the property.
+            </summary>
+        </member>
+        <member name="P:KLibrary.Labs.ObservableModel.ISettableProperty`1.NotifiesUnchanged">
+            <summary>
+            Gets a value indicating whether notifications occur even if the value has been unchanged.
+            </summary>
+        </member>
+        <member name="T:KLibrary.Labs.ObservableModel.IGetOnlyProperty`1">
+            <summary>
+            Represents an IObservable-based get-only property.
+            </summary>
+            <typeparam name="T">The type of the property.</typeparam>
+        </member>
+        <member name="M:KLibrary.Labs.ObservableModel.IGetOnlyProperty`1.OnNext">
+            <summary>
+            Notifies this object to update the value.
+            </summary>
+        </member>
+        <member name="P:KLibrary.Labs.ObservableModel.IGetOnlyProperty`1.Value">
+            <summary>
+            Gets the value of the property.
+            </summary>
+        </member>
+        <member name="P:KLibrary.Labs.ObservableModel.IGetOnlyProperty`1.NotifiesUnchanged">
+            <summary>
+            Gets a value indicating whether notifications occur even if the value has been unchanged.
+            </summary>
+        </member>
+        <member name="T:KLibrary.Labs.ObservableModel.ObservableProperty">
+            <summary>
+            Provides a set of static methods for the observable model.
+            </summary>
+        </member>
+        <member name="M:KLibrary.Labs.ObservableModel.ObservableProperty.CreateSettable``1(``0)">
+            <summary>
+            Creates an instance of IObservable-based settable property.
+            </summary>
+            <typeparam name="T">The type of the property.</typeparam>
+            <param name="defaultValue">The default value.</param>
+            <returns>An <see cref="T:KLibrary.Labs.ObservableModel.ISettableProperty`1"/> object.</returns>
+        </member>
+        <member name="M:KLibrary.Labs.ObservableModel.ObservableProperty.CreateGetOnly``1(System.Func{``0})">
+            <summary>
+            Creates an instance of IObservable-based get-only property.
+            The value is initialized with the return value of <paramref name="getValue"/>.
+            </summary>
+            <typeparam name="T">The type of the property.</typeparam>
+            <param name="getValue">The function to get a new property value.</param>
+            <returns>An <see cref="T:KLibrary.Labs.ObservableModel.IGetOnlyProperty`1"/> object.</returns>
+        </member>
+        <member name="M:KLibrary.Labs.ObservableModel.ObservableProperty.CreateGetOnlyWithDefault``1(System.Func{``0},``0)">
+            <summary>
+            Creates an instance of IObservable-based get-only property with the specified default value.
+            </summary>
+            <typeparam name="T">The type of the property.</typeparam>
+            <param name="getValue">The function to get a new property value.</param>
+            <param name="defaultValue">The default value.</param>
+            <returns>An <see cref="T:KLibrary.Labs.ObservableModel.IGetOnlyProperty`1"/> object.</returns>
+        </member>
+        <member name="M:KLibrary.Labs.ObservableModel.ObservableProperty.ToGetOnly``1(System.IObservable{``0},``0)">
+            <summary>
+            Creates an instance of IObservable-based get-only property from the predecessor sequence.
+            </summary>
+            <typeparam name="TSource">The type of the property.</typeparam>
+            <param name="source">The source sequence of elements.</param>
+            <param name="defaultValue">The default value.</param>
+            <returns>An <see cref="T:KLibrary.Labs.ObservableModel.IGetOnlyProperty`1"/> object.</returns>
+        </member>
+        <member name="M:KLibrary.Labs.ObservableModel.ObservableProperty.SelectToGetOnly``2(KLibrary.Labs.ObservableModel.ISettableProperty{``0},System.Func{``0,``1})">
+            <summary>
+            Creates an instance of IObservable-based get-only property from the predecessor settable property.
+            </summary>
+            <typeparam name="TSource">The type of the source property.</typeparam>
+            <typeparam name="TResult">The type of the property.</typeparam>
+            <param name="source">The source property.</param>
+            <param name="selector">The transform function.</param>
+            <returns>An <see cref="T:KLibrary.Labs.ObservableModel.IGetOnlyProperty`1"/> object.</returns>
+        </member>
+        <member name="M:KLibrary.Labs.ObservableModel.ObservableProperty.SelectToGetOnly``2(KLibrary.Labs.ObservableModel.IGetOnlyProperty{``0},System.Func{``0,``1})">
+            <summary>
+            Creates an instance of IObservable-based get-only property from the predecessor get-only property.
+            </summary>
+            <typeparam name="TSource">The type of the source property.</typeparam>
+            <typeparam name="TResult">The type of the property.</typeparam>
+            <param name="source">The source property.</param>
+            <param name="selector">The transform function.</param>
+            <returns>An <see cref="T:KLibrary.Labs.ObservableModel.IGetOnlyProperty`1"/> object.</returns>
+        </member>
+        <member name="M:KLibrary.Labs.ObservableModel.ObservableProperty.ToObservableMask``1(System.IObservable{``0})">
+            <summary>
+            Creates a mask to capsulate the source sequence.
+            </summary>
+            <typeparam name="TSource">The type of the source.</typeparam>
+            <param name="source">The source sequence of elements.</param>
+            <returns>An <see cref="T:System.IObservable`1"/> object.</returns>
+        </member>
+        <member name="M:KLibrary.Labs.ObservableModel.ObservableProperty.ToGetOnlyMask``1(KLibrary.Labs.ObservableModel.ISettableProperty{``0})">
+            <summary>
+            Creates a mask to capsulate the source settable property.
+            </summary>
+            <typeparam name="TSource">The type of the property.</typeparam>
+            <param name="source">The source property.</param>
+            <returns>An <see cref="T:KLibrary.Labs.ObservableModel.IGetOnlyProperty`1"/> object.</returns>
+        </member>
+        <member name="M:KLibrary.Labs.ObservableModel.ObservableProperty.Do``2(System.IObservable{``0},KLibrary.Labs.ObservableModel.IGetOnlyProperty{``1})">
+            <summary>
+            Notifies the property to update the value, for each element.
+            </summary>
+            <typeparam name="TSource">The type of the source.</typeparam>
+            <typeparam name="TProperty">The type of the property.</typeparam>
+            <param name="source">The source sequence of elements.</param>
+            <param name="property">The get-only property.</param>
+            <returns>A new source sequence.</returns>
+        </member>
+        <member name="M:KLibrary.Labs.ObservableModel.ObservableProperty.Subscribe``2(System.IObservable{``0},KLibrary.Labs.ObservableModel.IGetOnlyProperty{``1})">
+            <summary>
+            Notifies the property to update the value, for each element.
+            </summary>
+            <typeparam name="TSource">The type of the source.</typeparam>
+            <typeparam name="TProperty">The type of the property.</typeparam>
+            <param name="source">The source sequence of elements.</param>
+            <param name="property">The get-only property.</param>
+            <returns>An <see cref="T:System.IDisposable"/> object used to unsubscribe from the source sequence.</returns>
+        </member>
+    </members>
+</doc>
