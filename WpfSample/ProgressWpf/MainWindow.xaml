@@ -1,8 +1,18 @@
-﻿<Window x:Class="ProgressWpf.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:ProgressWpf" x:Class="ProgressWpf.MainWindow"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+	<Window.TaskbarItemInfo>
+		<TaskbarItemInfo ProgressValue="{Binding ProgressValue.Value, Mode=OneWay}" ProgressState="Normal"/>
+	</Window.TaskbarItemInfo>
+	<Window.DataContext>
+		<local:AppModel/>
+	</Window.DataContext>
+	<Grid>
+		<StackPanel VerticalAlignment="Center">
+			<TextBlock Text="{Binding ProgressValue.Value, Mode=OneWay, StringFormat=\{0:F2\}}" HorizontalAlignment="Center" FontSize="24"/>
+			<ProgressBar Value="{Binding ProgressValue.Value, Mode=OneWay}" Maximum="1" Height="40"/>
+		</StackPanel>
+	</Grid>
 </Window>
