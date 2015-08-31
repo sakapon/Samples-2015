@@ -12,9 +12,10 @@ namespace ProgressWpf
 
         public AppModel()
         {
-            ProgressValue = Observable.Interval(TimeSpan.FromSeconds(0.05))
-                .Select(l => l % 101)
-                .Select(l => l / 100.0)
+            ProgressValue = Observable.Interval(TimeSpan.FromSeconds(0.03))
+                .Select(n => n % 120)
+                .Select(n => n / 100.0)
+                .Select(v => v < 1.0 ? v : 1.0)
                 .ToGetOnly(0.0);
         }
     }
