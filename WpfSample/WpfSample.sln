@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BorderlessWpf", "BorderlessWpf\BorderlessWpf.csproj", "{EB68DE39-DA6D-4F57-BB3D-1CE774391038}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResolutionWpf", "ResolutionWpf\ResolutionWpf.csproj", "{A0720A21-C8BD-4E0C-AB27-A3C4C00ACC1A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayoutWpf", "LayoutWpf\LayoutWpf.csproj", "{7D24335A-172D-4D73-94CB-3E9D6892BF99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProgressWpf", "ProgressWpf\ProgressWpf.csproj", "{86E4732B-DB96-40D4-940F-224D66F799B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{7D24335A-172D-4D73-94CB-3E9D6892BF99}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D24335A-172D-4D73-94CB-3E9D6892BF99}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D24335A-172D-4D73-94CB-3E9D6892BF99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86E4732B-DB96-40D4-940F-224D66F799B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86E4732B-DB96-40D4-940F-224D66F799B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86E4732B-DB96-40D4-940F-224D66F799B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86E4732B-DB96-40D4-940F-224D66F799B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
