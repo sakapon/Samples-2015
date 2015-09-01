@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,6 +25,13 @@ namespace ReceiverWpf
         public MainWindow()
         {
             InitializeComponent();
+
+            var model = (AppModel)DataContext;
+
+            model.Position
+                .ObserveOn(SynchronizationContext.Current)
+                .Do(p => Left = p.X)
+                .Subscribe(p => Top = p.Y);
         }
     }
 }

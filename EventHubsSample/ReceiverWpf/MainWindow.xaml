@@ -1,8 +1,12 @@
-﻿<Window x:Class="ReceiverWpf.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+        xmlns:local="clr-namespace:ReceiverWpf" x:Class="ReceiverWpf.MainWindow"
+        Title="Receiver" Height="350" Width="525">
+	<Window.DataContext>
+		<local:AppModel/>
+	</Window.DataContext>
+	<Grid>
+		<TextBlock Text="{Binding Position.Value}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24"/>
+	</Grid>
 </Window>

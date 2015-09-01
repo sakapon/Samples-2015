@@ -22,6 +22,7 @@ namespace SenderWpf
 
             Position
                 .Select(p => p.ToString())
+                .Do(s => Debug.WriteLine("Sending message. Data: '{0}'", new[] { s }))
                 .Select(s => new EventData(Encoding.UTF8.GetBytes(s)))
                 .Subscribe(d => client.SendAsync(d), ex => Debug.WriteLine(ex));
         }
