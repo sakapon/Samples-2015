@@ -57,14 +57,23 @@ namespace ReceiverWpf
             return Task.FromResult<object>(null);
         }
 
+        static DateTime enqueuedTime = DateTime.UtcNow;
+        static readonly object enqueuedTimeLock = new object();
+
         async Task IEventProcessor.ProcessEventsAsync(PartitionContext context, IEnumerable<EventData> messages)
         {
             foreach (var data in messages)
             {
-                var message = Encoding.UTF8.GetString(data.GetBytes());
-                Message.Value = message;
+                lock (enqueuedTimeLock)
+                {
+                    if (data.EnqueuedTimeUtc <= enqueuedTime) continue;
+                    enqueuedTime = data.EnqueuedTimeUtc;
 
-                Debug.WriteLine("Message received. Partition: '{0}', Data: '{1}'", context.Lease.PartitionId, message);
+                    var message = Encoding.UTF8.GetString(data.GetBytes());
+                    Message.Value = message;
+
+                    Debug.WriteLine("Message received. Partition: '{0}', Data: '{1}'", context.Lease.PartitionId, message);
+                }
             }
             await context.CheckpointAsync();
         }
