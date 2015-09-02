@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows;
 using KLibrary.Labs.ObservableModel;
 using Microsoft.ServiceBus.Messaging;
+using Newtonsoft.Json;
 
 namespace SenderWpf
 {
@@ -20,8 +21,10 @@ namespace SenderWpf
 
             var client = EventHubClient.Create("sakapon-event-201508");
 
+            var index = 0;
             Position
-                .Select(p => p.ToString())
+                .Select(p => new { index = index++, position = p.ToString() })
+                .Select(o => JsonConvert.SerializeObject(o))
                 .Do(s => Debug.WriteLine("Sending message. Data: '{0}'", new[] { s }))
                 .Select(s => new EventData(Encoding.UTF8.GetBytes(s)))
                 .Subscribe(d => client.SendAsync(d), ex => Debug.WriteLine(ex));

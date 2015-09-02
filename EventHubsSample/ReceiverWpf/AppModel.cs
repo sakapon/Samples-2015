@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using KLibrary.Labs.ObservableModel;
 using Microsoft.ServiceBus.Messaging;
+using Newtonsoft.Json;
 
 namespace ReceiverWpf
 {
@@ -57,20 +58,22 @@ namespace ReceiverWpf
             return Task.FromResult<object>(null);
         }
 
-        static DateTime enqueuedTime = DateTime.UtcNow;
-        static readonly object enqueuedTimeLock = new object();
+        static int index = -1;
+        static readonly object indexLock = new object();
 
         async Task IEventProcessor.ProcessEventsAsync(PartitionContext context, IEnumerable<EventData> messages)
         {
             foreach (var data in messages)
             {
-                lock (enqueuedTimeLock)
+                lock (indexLock)
                 {
-                    if (data.EnqueuedTimeUtc <= enqueuedTime) continue;
-                    enqueuedTime = data.EnqueuedTimeUtc;
-
                     var message = Encoding.UTF8.GetString(data.GetBytes());
-                    Message.Value = message;
+                    dynamic obj = JsonConvert.DeserializeObject(message);
+
+                    if (obj.index <= index) continue;
+                    index = obj.index;
+
+                    Message.Value = obj.position;
 
                     Debug.WriteLine("Message received. Partition: '{0}', Data: '{1}'", context.Lease.PartitionId, message);
                 }
