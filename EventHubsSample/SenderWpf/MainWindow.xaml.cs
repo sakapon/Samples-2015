@@ -28,9 +28,7 @@ namespace SenderWpf
             var model = (AppModel)DataContext;
 
             Observable.FromEventPattern(this, "Loaded")
-                .Select(_ => new Point(Left, Top))
-                .Subscribe(model.Position);
-            Observable.FromEventPattern(this, "LocationChanged")
+                .Merge(Observable.FromEventPattern(this, "LocationChanged"))
                 .Select(_ => new Point(Left, Top))
                 .Subscribe(model.Position);
         }
