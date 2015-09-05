@@ -29,7 +29,7 @@ namespace SenderWpf
 
             Observable.FromEventPattern(this, "Loaded")
                 .Merge(Observable.FromEventPattern(this, "LocationChanged"))
-                .Select(_ => new Point(Left, Top))
+                .Select(_ => new Point(Math.Round(Left), Math.Round(Top)))
                 .Subscribe(model.Position);
         }
     }
