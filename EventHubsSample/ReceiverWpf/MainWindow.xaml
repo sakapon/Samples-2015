@@ -1,12 +1,13 @@
 ﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:ReceiverWpf" x:Class="ReceiverWpf.MainWindow"
-        Title="Receiver" Height="240" Width="360">
+        xmlns:local="clr-namespace:ReceiverWpf" x:Name="window" x:Class="ReceiverWpf.MainWindow"
+        Title="Receiver" Height="240" Width="360" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" Background="#99FFCC99">
 	<Window.DataContext>
 		<local:AppModel/>
 	</Window.DataContext>
 	<Grid>
+		<TextBlock Text="{Binding Title, ElementName=window}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="24" Margin="12"/>
 		<TextBlock Text="{Binding Position.Value}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"/>
 	</Grid>
 </Window>

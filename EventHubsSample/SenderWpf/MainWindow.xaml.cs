@@ -25,6 +25,8 @@ namespace SenderWpf
         {
             InitializeComponent();
 
+            MouseLeftButtonDown += (o, e) => DragMove();
+
             var model = (AppModel)DataContext;
 
             Observable.FromEventPattern(this, "Loaded")

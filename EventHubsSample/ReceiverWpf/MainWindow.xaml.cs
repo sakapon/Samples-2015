@@ -26,6 +26,8 @@ namespace ReceiverWpf
         {
             InitializeComponent();
 
+            MouseLeftButtonDown += (o, e) => DragMove();
+
             var model = (AppModel)DataContext;
 
             model.Position
