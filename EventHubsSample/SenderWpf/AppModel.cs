@@ -27,7 +27,7 @@ namespace SenderWpf
                 .Select(o => JsonConvert.SerializeObject(o))
                 .Do(m => Debug.WriteLine("Sending message. {0}", new[] { m }))
                 .Select(m => new EventData(Encoding.UTF8.GetBytes(m)))
-                .Subscribe(d => client.SendAsync(d), ex => Debug.WriteLine(ex));
+                .Subscribe(d => client.SendAsync(d));
         }
     }
 }
