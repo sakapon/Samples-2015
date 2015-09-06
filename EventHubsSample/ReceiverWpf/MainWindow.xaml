@@ -7,7 +7,7 @@
 		<local:AppModel/>
 	</Window.DataContext>
 	<Grid>
-		<TextBlock Text="{Binding Title, ElementName=window}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="24" Margin="12"/>
+		<TextBlock Text="{Binding Title, ElementName=window}" HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="24" Margin="12"/>
 		<TextBlock Text="{Binding Position.Value}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"/>
 	</Grid>
 </Window>
