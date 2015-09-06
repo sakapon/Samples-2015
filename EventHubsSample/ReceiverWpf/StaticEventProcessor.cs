@@ -20,7 +20,7 @@ namespace ReceiverWpf
 
         public async Task CloseAsync(PartitionContext context, CloseReason reason)
         {
-            Debug.WriteLine("Processor closing. Partition '{0}', Reason: '{1}'", context.Lease.PartitionId, reason);
+            Debug.WriteLine("Partition {0}: Processor closing. Reason: {1}", context.Lease.PartitionId, reason);
 
             if (reason == CloseReason.Shutdown)
                 await context.CheckpointAsync();
@@ -28,7 +28,7 @@ namespace ReceiverWpf
 
         public Task OpenAsync(PartitionContext context)
         {
-            Debug.WriteLine("Processor opening. Partition: '{0}', Offset: '{1}'", context.Lease.PartitionId, context.Lease.Offset);
+            Debug.WriteLine("Partition {0}: Processor opening. Offset: {1}", context.Lease.PartitionId, context.Lease.Offset);
 
             return Task.FromResult<object>(null);
         }
@@ -42,7 +42,7 @@ namespace ReceiverWpf
                 lock (messageLock)
                 {
                     var message = Encoding.UTF8.GetString(data.GetBytes());
-                    Debug.WriteLine("Message received. Partition: '{0}', Message: '{1}'", context.Lease.PartitionId, message);
+                    Debug.WriteLine("Partition {0}: Message received. {1}", context.Lease.PartitionId, message);
 
                     Message.Value = message;
                 }

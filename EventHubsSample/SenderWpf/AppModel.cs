@@ -25,8 +25,8 @@ namespace SenderWpf
             Position
                 .Select(p => new { index = index++, position = p.ToString() })
                 .Select(o => JsonConvert.SerializeObject(o))
-                .Do(s => Debug.WriteLine("Sending message. Data: '{0}'", new[] { s }))
-                .Select(s => new EventData(Encoding.UTF8.GetBytes(s)))
+                .Do(m => Debug.WriteLine("Sending message. {0}", new[] { m }))
+                .Select(m => new EventData(Encoding.UTF8.GetBytes(m)))
                 .Subscribe(d => client.SendAsync(d), ex => Debug.WriteLine(ex));
         }
     }

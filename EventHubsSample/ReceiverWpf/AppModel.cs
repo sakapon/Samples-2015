@@ -19,9 +19,9 @@ namespace ReceiverWpf
             var index = -1;
             Position = StaticEventProcessor.Message
                 .Select(m => (dynamic)JsonConvert.DeserializeObject(m))
-                .Where(_ => _.index > index)
-                .Do(_ => index = _.index)
-                .Select(_ => (string)_.position)
+                .Where(o => o.index > index)
+                .Do(o => index = o.index)
+                .Select(o => (string)o.position)
                 .Select(Point.Parse)
                 .ToGetOnly(default(Point));
 
