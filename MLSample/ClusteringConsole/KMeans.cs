@@ -5,20 +5,51 @@ using System.Linq;
 
 namespace ClusteringConsole
 {
+    [DebuggerDisplay(@"\{Clusters: {ClustersNumber}, Iterations: {IterationsNumber}\}")]
     public class KMeans<T>
     {
-        public int Clusters { get; private set; }
-        public int Iterations { get; private set; }
+        public int ClustersNumber { get; private set; }
+        public int IterationsNumber { get; private set; }
 
-        public KMeans(int clusters, int iterations)
+        public KMeans(int clustersNumber, int iterationsNumber)
         {
-            Clusters = clusters;
-            Iterations = iterations;
+            ClustersNumber = clustersNumber;
+            IterationsNumber = iterationsNumber;
         }
 
-        public Dictionary<int, Record<T>[]> Execute(Record<T>[] records)
+        public Dictionary<int, Record<T>[]> Train(Record<T>[] records)
         {
-            throw new NotImplementedException();
+            var clusters = InitializeClusters(records);
+
+            for (var i = 0; i < IterationsNumber; i++)
+                TrainOnce(clusters, records);
+
+            return clusters.ToDictionary(c => c.Id, c => c.Records.ToArray());
+        }
+
+        Cluster<T>[] InitializeClusters(Record<T>[] records)
+        {
+            return RandomUtility.ShuffleRange(records.Length)
+                .Take(ClustersNumber)
+                .Select(i => records[i])
+                .Select((r, i) => new Cluster<T>(i, r.Features))
+                .ToArray();
+        }
+
+        void TrainOnce(Cluster<T>[] clusters, Record<T>[] records)
+        {
+            Array.ForEach(clusters, c => c.Records.Clear());
+            AssignRecords(clusters, records);
+            Array.ForEach(clusters, c => c.TuneCentroid());
+        }
+
+        static void AssignRecords(Cluster<T>[] clusters, IEnumerable<Record<T>> records)
+        {
+            foreach (var record in records)
+            {
+                var cluster = clusters.FirstOnMin(c => FeaturesHelper.GetDistance(c.Centroid, record.Features));
+                cluster.Records.Add(record);
+            }
         }
     }
 

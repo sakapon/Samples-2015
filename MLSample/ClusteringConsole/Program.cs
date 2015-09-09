@@ -29,7 +29,7 @@ namespace ClusteringConsole
                 .ToArray();
 
             var clustering = new KMeans<Color>(20, 50);
-            var clusters = clustering.Execute(records);
+            var clusters = clustering.Train(records);
 
             foreach (var cluster in clusters)
             {
@@ -49,7 +49,7 @@ namespace ClusteringConsole
                 .ToArray();
 
             var clustering = new KMeans<int>(10, 20);
-            var clusters = clustering.Execute(records);
+            var clusters = clustering.Train(records);
 
             foreach (var cluster in clusters)
             {
