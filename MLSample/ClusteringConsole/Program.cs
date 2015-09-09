@@ -22,6 +22,8 @@ namespace ClusteringConsole
                 .Where(p => p.PropertyType == typeof(Color))
                 .Select(p => (Color)p.GetValue(null))
                 .Where(c => c.A == 255) // Exclude Transparent.
+                .Where(c => c.Name != "Aqua")
+                .Where(c => c.Name != "Fuchsia")
                 .ToArray();
 
             var records = colors
