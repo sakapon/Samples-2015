@@ -6,7 +6,7 @@ namespace ClusteringConsole
 {
     public static class Enumerable2
     {
-        public static TSource FirstOnMin<TSource>(this IEnumerable<TSource> source, Func<TSource, double> selector)
+        public static TSource FirstToMin<TSource>(this IEnumerable<TSource> source, Func<TSource, double> selector)
         {
             var o = source
                 .Select(x => new { x, v = selector(x) })

@@ -19,7 +19,7 @@ namespace ClusteringConsole
 
         public Dictionary<int, Record<T>[]> Train(Record<T>[] records)
         {
-            var clusters = InitializeClusters(records);
+            var clusters = InitializeClusters(ClustersNumber, records);
 
             for (var i = 0; i < IterationsNumber; i++)
                 TrainOnce(clusters, records);
@@ -27,16 +27,16 @@ namespace ClusteringConsole
             return clusters.ToDictionary(c => c.Id, c => c.Records.ToArray());
         }
 
-        Cluster<T>[] InitializeClusters(Record<T>[] records)
+        static Cluster<T>[] InitializeClusters(int clustersNumber, Record<T>[] records)
         {
             return RandomUtility.ShuffleRange(records.Length)
-                .Take(ClustersNumber)
+                .Take(clustersNumber)
                 .Select(i => records[i])
                 .Select((r, i) => new Cluster<T>(i, r.Features))
                 .ToArray();
         }
 
-        void TrainOnce(Cluster<T>[] clusters, Record<T>[] records)
+        static void TrainOnce(Cluster<T>[] clusters, Record<T>[] records)
         {
             Array.ForEach(clusters, c => c.Records.Clear());
             AssignRecords(clusters, records);
@@ -47,7 +47,7 @@ namespace ClusteringConsole
         {
             foreach (var record in records)
             {
-                var cluster = clusters.FirstOnMin(c => FeaturesHelper.GetDistance(c.Centroid, record.Features));
+                var cluster = clusters.FirstToMin(c => FeaturesHelper.GetDistance(c.Centroid, record.Features));
                 cluster.Records.Add(record);
             }
         }
