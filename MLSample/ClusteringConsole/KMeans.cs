@@ -81,6 +81,8 @@ namespace ClusteringConsole
 
         public void TuneCentroid()
         {
+            if (Records.Count == 0) return;
+
             Centroid = Enumerable.Range(0, Centroid.Length)
                 .Select(i => Records.Average(r => r.Features[i]))
                 .ToArray();
