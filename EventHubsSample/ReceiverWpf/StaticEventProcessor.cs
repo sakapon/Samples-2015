@@ -13,6 +13,8 @@ namespace ReceiverWpf
     {
         public static ISettableProperty<string> Message { get; private set; }
 
+        static readonly object messageLock = new object();
+
         static StaticEventProcessor()
         {
             Message = ObservableProperty.CreateSettable<string>(null);
@@ -32,8 +34,6 @@ namespace ReceiverWpf
 
             return Task.FromResult<object>(null);
         }
-
-        static readonly object messageLock = new object();
 
         public async Task ProcessEventsAsync(PartitionContext context, IEnumerable<EventData> messages)
         {

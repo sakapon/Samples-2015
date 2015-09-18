@@ -26,11 +26,12 @@ namespace ReceiverWpf
                 .ToGetOnly(default(Point));
 
             var hostName = string.Format("Host-{0:yyyyMMdd-HHmmss}", DateTime.Now);
-            var eventHubName = ConfigurationManager.AppSettings["EventHubName"];
+            var eventHubName = "sakapon-event-201508";
             var eventHubConnectionString = ConfigurationManager.AppSettings["Microsoft.ServiceBus.ConnectionString"];
             var storageConnectionString = ConfigurationManager.AppSettings["StorageConnection"];
 
-            // Receives event once for one Consumer Group.
+            // Receives an event once for one consumer group.
+            // EventHubConsumerGroup.DefaultGroupName is "$Default".
             var host = new EventProcessorHost(hostName, eventHubName, EventHubConsumerGroup.DefaultGroupName, eventHubConnectionString, storageConnectionString);
             host.RegisterEventProcessorAsync<StaticEventProcessor>();
         }
