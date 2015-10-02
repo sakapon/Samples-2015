@@ -41,6 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConvertHelper.cs" />
+    <Compile Include="CsvFile.cs" />
+    <Compile Include="EntityType.cs" />
+    <Compile Include="ExpressionHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
