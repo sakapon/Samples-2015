@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,11 +11,12 @@ namespace ExpressionsConsole
     {
         static void Main(string[] args)
         {
-            EntityTest();
+            EntityTypeTest();
+            EntityTypeTimeTest();
             CsvTest();
         }
 
-        static void EntityTest()
+        static void EntityTypeTest()
         {
             var PersonType = EntityType.Create(new { Id = 0, Name = "", Birthday = DateTime.MinValue });
             // Uses a lambda expression.
@@ -25,6 +27,21 @@ namespace ExpressionsConsole
 
             Console.WriteLine(person1);
             Console.WriteLine(person2);
+        }
+
+        static void EntityTypeTimeTest()
+        {
+            var sw = Stopwatch.StartNew();
+
+            var PersonType = EntityType.Create(new { Id = 0, Name = "", Birthday = DateTime.MinValue });
+
+            Console.WriteLine(sw.Elapsed);
+
+            for (var i = 0; i < 1000000; i++)
+                PersonType.CreateEntity(i, "Person", DateTime.MaxValue);
+
+            sw.Stop();
+            Console.WriteLine(sw.Elapsed);
         }
 
         static void CsvTest()
