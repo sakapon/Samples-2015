@@ -14,6 +14,7 @@ namespace ExpressionsConsole
             EntityTypeTest();
             EntityTypeTimeTest();
             CsvTest();
+            TableTest.DoTest();
         }
 
         static void EntityTypeTest()
