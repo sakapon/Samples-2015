@@ -14,7 +14,8 @@ namespace ExpressionsConsole
             EntityTypeTest();
             EntityTypeTimeTest();
             CsvTest();
-            TableTest.DoTest();
+            //AssertTest("");
+            //TableTest.DoTest();
         }
 
         static void EntityTypeTest()
@@ -55,6 +56,12 @@ namespace ExpressionsConsole
 
             foreach (var item in query)
                 Console.WriteLine("{0}: {1}", item.StartTime, item.Name);
+        }
+
+        static void AssertTest(string parameter1)
+        {
+            Assert.IsArgumentNotNull(() => parameter1);
+            Assert.IsArgumentNotEmpty(() => parameter1);
         }
     }
 }
