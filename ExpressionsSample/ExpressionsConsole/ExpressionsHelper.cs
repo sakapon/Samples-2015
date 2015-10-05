@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace ExpressionsConsole
 {
-    public static class ExpressionHelper
+    public static class ExpressionsHelper
     {
         public static object Invoke(this Expression expression)
         {
