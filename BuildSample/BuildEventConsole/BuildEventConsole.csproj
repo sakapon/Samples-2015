@@ -51,7 +51,9 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>cd $(ProjectDir)
-xcopy Data $(OutDir)Data /D/E/C/I/H/Y</PostBuildEvent>
+xcopy Data $(OutDir)Data /D/E/C/I/H/Y
+powershell -ExecutionPolicy Unrestricted ..\Tools\CreateZip.ps1 $(OutDir) ..\Downloads\$(TargetName).zip
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
