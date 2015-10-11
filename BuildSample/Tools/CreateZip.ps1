@@ -1,4 +1,9 @@
-﻿[System.Reflection.Assembly]::LoadWithPartialName("System.IO.Compression.FileSystem")
+﻿# source directory path
+if (-not ($Args[0])) { return 100 }
+# target zip file path
+if (-not ($Args[1])) { return 101 }
+
+[System.Reflection.Assembly]::LoadWithPartialName("System.IO.Compression.FileSystem")
 
 $parent = [System.IO.Directory]::GetParent($Args[1])
 [System.IO.Directory]::CreateDirectory($parent)
