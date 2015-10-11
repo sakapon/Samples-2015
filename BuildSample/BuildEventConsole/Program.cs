@@ -29,12 +29,13 @@ namespace BuildEventConsole
 
         static void CreateZipForAssembly(string sourceAssemblyFilePath, string targetDirPath)
         {
+            var assemblyName = Path.GetFileNameWithoutExtension(sourceAssemblyFilePath);
             var assembly = Assembly.LoadFrom(sourceAssemblyFilePath);
-            var fileVersion = assembly.GetCustomAttribute<AssemblyFileVersionAttribute>();
-            if (fileVersion == null) return;
+            var assemblyFileVersion = assembly.GetCustomAttribute<AssemblyFileVersionAttribute>();
+            if (assemblyFileVersion == null) return;
 
             var sourceDirPath = Path.GetDirectoryName(sourceAssemblyFilePath);
-            var targetZipFileName = string.Format("{0}-{1}.zip", Path.GetFileNameWithoutExtension(sourceAssemblyFilePath), fileVersion.Version);
+            var targetZipFileName = string.Format("{0}-{1}.zip", assemblyName, assemblyFileVersion.Version);
             var targetZipFilePath = Path.Combine(targetDirPath, targetZipFileName);
 
             Directory.CreateDirectory(targetDirPath);
