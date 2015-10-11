@@ -53,7 +53,7 @@
   <PropertyGroup>
     <PostBuildEvent>cd $(ProjectDir)
 xcopy Data $(OutDir)Data /D/E/C/I/H/Y
-powershell -ExecutionPolicy Unrestricted ..\Tools\CreateZip.ps1 $(OutDir) ..\Downloads\$(TargetName).zip
+powershell -ExecutionPolicy Unrestricted ..\Tools\CreateZipForAssembly.ps1 $(TargetPath) ..\Downloads
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
