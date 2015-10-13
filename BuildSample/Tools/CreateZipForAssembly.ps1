@@ -3,7 +3,7 @@ if (-not ($Args[0])) { return 100 }
 # target dir path
 if (-not ($Args[1])) { return 101 }
 
-[System.Reflection.Assembly]::LoadWithPartialName("System.IO.Compression.FileSystem")
+Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 $assemblyName = [System.IO.Path]::GetFileNameWithoutExtension($Args[0])
 $assembly = [System.Reflection.Assembly]::LoadFrom($Args[0])

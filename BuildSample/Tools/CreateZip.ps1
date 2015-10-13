@@ -3,7 +3,7 @@ if (-not ($Args[0])) { return 100 }
 # target zip file path
 if (-not ($Args[1])) { return 101 }
 
-[System.Reflection.Assembly]::LoadWithPartialName("System.IO.Compression.FileSystem")
+Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 $parent = [System.IO.Path]::GetDirectoryName($Args[1])
 [System.IO.Directory]::CreateDirectory($parent)
