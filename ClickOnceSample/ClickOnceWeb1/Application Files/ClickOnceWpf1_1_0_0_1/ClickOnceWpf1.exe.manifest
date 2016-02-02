@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="ClickOnceWpf1.exe" version="1.0.0.1" publicKeyToken="ed1aad1087708bfa" language="neutral" processorArchitecture="msil" type="win32" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="ClickOnceWpf1" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+    <commandLine file="ClickOnceWpf1.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          UAC マニフェスト オプション
+          Windows のユーザー アカウント制御のレベルを変更するには、
+          requestedExecutionLevel ノードを以下のいずれかで置換します。
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+         下位互換性を保つためにファイルおよびレジストリの仮想化を使用する場合、
+         requestedExecutionLevel ノードを削除します。
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ClickOnceWpf1.exe" size="8664">
+      <assemblyIdentity name="ClickOnceWpf1" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>juUTJ5BBtvL8+ntdhMxJJIi4EMTqURON/HJzXWPmFX8=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="ClickOnceWpf1.exe.config" size="187">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>xm4bo26HQ0LNVwz1vdPYtzhkpMnp2AI5i+f0b+OahTI=</dsig:DigestValue>
+    </hash>
+  </file>
+<publisherIdentity name="CN=Abc Root, O=Abc Company, C=JP" issuerKeyHash="85cefdad06b7af0c0143605ba8a4edbd3fb65962" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>almaeAyRcJ2lSz8nS/s8WbuLBuIoh8SStMNvntkvG+c=</DigestValue></Reference></SignedInfo><SignatureValue>sS5tB3IVGbwDYTlPfQaLnL5hVVc85p/OKs/9/6TnC64ozTDz9vo50N4bfNE+2vjzmY+aOPMamC8zLpYXC2xp9qD3lTTb/GG9emkAwpZqs++m2idI7jpblk2QqyDlz4YSE4SUrNxnf2WnSBh8y26XE2gXb7eUSxWPxHKVUddD8peTcibC8ruNmOehMJEj64tylcgcLb1IjOE1Jq/v2U5KQcjpt78AkeeqjdwD0E13tgGip+C+yAVBx7zbhjf5tAdLVAaVInhz5NqwgjWt41hJPne5/oPB/qQUf75A6eFDcdvq2+1eLtDEv1yD5WDfohr4kUFZrl1TG6Ne7KNiySmAPQ==</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>uQV1vVs8mMbG1ONlKuoDWPL7LM92eDG/TxogHKGZ+++5VT4M4WprMBsel1LkjaW20iQLWSELmly9EqVlF8nFRmRWxQDrurMXIcviHMWP/rDqtMOl6tkfU0pMKWDsMOWat496AUib1Jo0UJgb4Xr2KTIHkhlsJYBKPBX8dmLVjM9lN1PWCfBUJqWKSB99UqvHK57XamoDXxteGBjzjZy8IES1rSsVaoQ7A/IuoNDn+DnvU2APw5WTFLCPr+c7fdZUv0U5BCaAlzD1BYqEDgX4vngDtw0x5PMFBzQ+h1lalsfW3QHBxroL7eJ4OpCIucBT5LQtFWKL0252vbTMySp/cw==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="e71b2fd99e6fc3b492c48728e2068bbb593cfb4b273f4ba59d70910c789a596a" Description="" Url=""><as:assemblyIdentity name="ClickOnceWpf1.exe" version="1.0.0.1" publicKeyToken="ed1aad1087708bfa" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=Abc Root, O=Abc Company, C=JP</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>iOjwiVVRMd1wsYaQVL8/h+wNL96xfb7sS1bVkMrdO+g=</DigestValue></Reference></SignedInfo><SignatureValue>C2a0nNFiN06KNXqfm+SUO84KkvZQWbqm8ymoeyb6HVy2hKvzWMZ2ToLW5j/+A1be70cZb1VaYL4sHMbkKRPDhC0b3GBzHM+zyt+XmLyou5viYX1g9pkwasd/+tkAi+WIE2I/sEDFtNxoMewXrEmk+/xlmUz9pqI6N5rtRnWG/k0W6UrrDFxIdVS7ZPOHVxqM82cptJah1dF8ozzmh129HLka/ec+FPVCVCFosFxyRlyOhzKZSiWOh3McZAhVfUO8kViNliUWTcpqW6/DJJ5alLAm5e28BcavEAgk8HH0mNU+BD7NIeIspNtBeU529bkmBxc2HzjxKHi2atLDHI1ozA==</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>uQV1vVs8mMbG1ONlKuoDWPL7LM92eDG/TxogHKGZ+++5VT4M4WprMBsel1LkjaW20iQLWSELmly9EqVlF8nFRmRWxQDrurMXIcviHMWP/rDqtMOl6tkfU0pMKWDsMOWat496AUib1Jo0UJgb4Xr2KTIHkhlsJYBKPBX8dmLVjM9lN1PWCfBUJqWKSB99UqvHK57XamoDXxteGBjzjZy8IES1rSsVaoQ7A/IuoNDn+DnvU2APw5WTFLCPr+c7fdZUv0U5BCaAlzD1BYqEDgX4vngDtw0x5PMFBzQ+h1lalsfW3QHBxroL7eJ4OpCIucBT5LQtFWKL0252vbTMySp/cw==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIDYzCCAkugAwIBAgIQCcWborPo6p5DQqPPl/rCqjANBgkqhkiG9w0BAQsFADA2MQswCQYDVQQGEwJKUDEUMBIGA1UEChMLQWJjIENvbXBhbnkxETAPBgNVBAMTCEFiYyBSb290MCAXDTk5MTIzMTE1MDAwMFoYDzIwOTkxMjMxMTUwMDAwWjA2MQswCQYDVQQGEwJKUDEUMBIGA1UEChMLQWJjIENvbXBhbnkxETAPBgNVBAMTCEFiYyBSb290MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuQV1vVs8mMbG1ONlKuoDWPL7LM92eDG/TxogHKGZ+++5VT4M4WprMBsel1LkjaW20iQLWSELmly9EqVlF8nFRmRWxQDrurMXIcviHMWP/rDqtMOl6tkfU0pMKWDsMOWat496AUib1Jo0UJgb4Xr2KTIHkhlsJYBKPBX8dmLVjM9lN1PWCfBUJqWKSB99UqvHK57XamoDXxteGBjzjZy8IES1rSsVaoQ7A/IuoNDn+DnvU2APw5WTFLCPr+c7fdZUv0U5BCaAlzD1BYqEDgX4vngDtw0x5PMFBzQ+h1lalsfW3QHBxroL7eJ4OpCIucBT5LQtFWKL0252vbTMySp/cwIDAQABo2swaTBnBgNVHQEEYDBegBBRTqH2494xFfQkcfotAdCpoTgwNjELMAkGA1UEBhMCSlAxFDASBgNVBAoTC0FiYyBDb21wYW55MREwDwYDVQQDEwhBYmMgUm9vdIIQCcWborPo6p5DQqPPl/rCqjANBgkqhkiG9w0BAQsFAAOCAQEAIUMkD+a4yqaAVt3EFN+7Cy02asEzh5qBuXHsexmQJJbx1yO27bZ8/6z8TyBOYSdDGSV4GKareWFFkfW8fgkCEM4jQbqk0p7AzKumrny+88L4rO2fhb63mjuIfONENFOjfYmBH7sQeIA2vGAibD8dTm3N2TwJNjy75hjdfLJDDrq0NeE6vJlYoaTHLBNQEBXcl5qMtpQFyvm9HU+ps6W2eltZHD6R0Al3XFQZvTJ1wl5Jm176K/8LXjIkDN9RItwb8Bl+9T0RCOjG9IRX1iC8zQacuSoaUfLSAt5B1sjQbglF+lEXdzE+FKwQ1xG+RPZ97eKXldA0w+nd1BEXdbvfIA==</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>
