@@ -1,0 +1,8 @@
+﻿Visual Studio 開発者コマンド プロンプトでこのフォルダーに移動して実行します。
+
+- Members, Passwords
+Abc Apps: 1111
+
+- Commands
+makecert -n "CN=Abc Apps,O=Abc Company,C=JP" -a sha256 -b 01/01/2000 -e 01/01/2100 -eku 1.3.6.1.5.5.7.3.3 -cy end -r -sv abc-apps.pvk abc-apps.cer
+pvk2pfx -pvk abc-apps.pvk -spc abc-apps.cer -pfx abc-apps.pfx -f -pi 1111
