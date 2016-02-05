@@ -1,0 +1,12 @@
+﻿Visual Studio 開発者コマンド プロンプトでこのフォルダーに移動して実行します。
+
+- Members, Passwords
+Abc Root: 1111
+Abc Test: 2222
+
+- Commands
+makecert -n "CN=Abc Root,O=Abc Company,C=JP" -a sha256 -b 01/01/2016 -e 01/01/2017 -eku 1.3.6.1.5.5.7.3.3 -cy authority -r -sv abc-root.pvk abc-root.cer
+
+makecert -n "CN=Abc Test,O=Abc Company,C=JP" -a sha256 -b 01/01/2016 -e 01/01/2017 -eku 1.3.6.1.5.5.7.3.3 -cy end -iv abc-root.pvk -ic abc-root.cer -sv abc-test.pvk abc-test.cer
+cert2spc abc-root.cer abc-test.cer abc-test.spc
+pvk2pfx -pvk abc-test.pvk -spc abc-test.spc -pfx abc-test.pfx -f -pi 2222
