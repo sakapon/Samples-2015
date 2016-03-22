@@ -13,3 +13,5 @@ Sample programs, mainly used for [the blog (Do Design Space)](https://sakapon.wo
 * [.NET ビルド小技集](https://sakapon.wordpress.com/2015/10/13/dotnet-build-1/)
 * [証明書を作成する](https://sakapon.wordpress.com/2015/12/11/make-certificates/)
 * [アプリケーションを ClickOnce で発行する](https://sakapon.wordpress.com/2015/12/12/publish-clickonce/)
+* [既存の証明書を使って ClickOnce で発行する](https://sakapon.wordpress.com/2015/12/13/clickonce-certificates/)
+* [証明書を作成するときのオプション (OID など)](https://sakapon.wordpress.com/2016/02/08/make-certificates-oid/)
