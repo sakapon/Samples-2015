@@ -11,6 +11,7 @@ Sample programs, mainly used for [the blog (Do Design Space)](https://sakapon.wo
 * [エンティティを匿名型で手軽に実装する](https://sakapon.wordpress.com/2015/10/03/anonymous-entities-1/)
 * [Azure Table の検索条件を LINQ で指定する](https://sakapon.wordpress.com/2015/10/05/azure-table-lambda/)
 * [.NET ビルド小技集](https://sakapon.wordpress.com/2015/10/13/dotnet-build-1/)
+* [ビルドして ZIP にする PowerShell スクリプト](https://sakapon.wordpress.com/2018/02/06/zip-release/)
 * [証明書を作成する](https://sakapon.wordpress.com/2015/12/11/make-certificates/)
 * [アプリケーションを ClickOnce で発行する](https://sakapon.wordpress.com/2015/12/12/publish-clickonce/)
 * [既存の証明書を使って ClickOnce で発行する](https://sakapon.wordpress.com/2015/12/13/clickonce-certificates/)
